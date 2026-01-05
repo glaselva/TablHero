@@ -9,7 +9,7 @@
         "desc": "Combatti draghi con la community! Entry 5€",
         "details": "Livello 1-5, 4 ore, premi per MVP. Porta dadi!",
         "rsvp": true,
-        "map": "https://maps.google.com/embed?pb=..."
+        "map": null
     },
     {
         "id": 2,
@@ -33,7 +33,7 @@
         "desc": "Giochi da tavolo vari, adatto a tutti!",
         "details": "Porta il tuo gioco preferito o gioca con i nostri.",
         "rsvp": true,
-        "map": "https://maps.google.com/embed?pb=..."
+        "map": null
     },
     {
         "id": 4,
@@ -57,7 +57,7 @@
         "desc": "Competizione Warhammer 40k, tutte le edizioni.",
         "details": "Premi per i primi tre, iscrizione 10€.",
         "rsvp": true,
-        "map": "https://maps.google.com/embed?pb=..."
+        "map": null
     },
     {
         "id": 6,
@@ -69,6 +69,6 @@
         "desc": "Campionato regionale Yu-Gi-Oh! con premi esclusivi!",
         "details": "Formato Standard, registrazione obbligatoria. Premi per i primi 8 giocatori.",
         "rsvp": true,
-        "map": "https://maps.google.com/embed?pb=..."
+        "map": null
     }
 ]
