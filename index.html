@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TablHero - La tua Community di Giochi da Tavolo</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <i class="fas fa-dice-d20"></i> TablHero
+            </a>
+            <div class="nav-toggle" id="navToggle">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">Chi Siamo</a></li>
+                <li><a href="events.html">Eventi</a></li>
+                <li><a href="membership.html">Membership</a></li>
+                <li><a href="collabs.html" class="active">Collaborazioni</a></li>
+                <li><a href="contacts.html">Contatti</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Super Accogliente -->
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-content">
+            <h1>🎲 Benvenuti su TablHero</h1>
+            <p>Unisciti alla community più calda di giochi da tavolo, RPG e serate nerd! Amici, risate e dadi epici ti aspettano.</p>
+            <div class="hero-buttons">
+                <a href="events.html" class="btn-primary pulse">Gioca Ora!</a>
+                <a href="about.html" class="btn-secondary">Scopri di Più</a>
+            </div>
+            <div class="hero-scroll"><i class="fas fa-chevron-down"></i></div>
+        </div>
+    </section>
+
+    <!-- Features Cards Accoglienti -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 class="section-title bounce-in">Perché TablHero?</h2>
+            <div class="features-grid">
+                <div class="feature-card warm-glow">
+                    <div class="icon-wrapper"><i class="fas fa-users"></i></div>
+                    <h3>Amici Veri</h3>
+                    <p>Da novellini a veterani, tutti uniti dalla passione!</p>
+                </div>
+                <div class="feature-card warm-glow delay-1">
+                    <div class="icon-wrapper"><i class="fas fa-calendar-check"></i></div>
+                    <h3>Eventi Settimanali</h3>
+                    <p>Live, online o ibridi - ce n'è per tutti!</p>
+                </div>
+                <div class="feature-card warm-glow delay-2">
+                    <div class="icon-wrapper"><i class="fas fa-trophy"></i></div>
+                    <h3>Premi e Sfide</h3>
+                    <p>Tornei epici con trofei da veri campioni!</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Next Event Card -->
+    <section id="next-event" class="next-event">
+        <div class="container">
+            <h2 class="section-title">Prossimo Evento</h2>
+            <div id="next-event-card" class="event-card">
+                <!-- Event content will be populated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Caldo -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-dice-d20"></i> TablHero
+                    <p>La tua community per giochi da tavolo e RPG</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="about.html">Chi Siamo</a>
+                    <a href="events.html">Eventi</a>
+                    <a href="membership.html">Membership</a>
+                    <a href="collabs.html">Collaborazioni</a>
+                    <a href="contacts.html">Contatti</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TablHero. Tutti i dadi rotolano per te ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

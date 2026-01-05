@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership - TablHero</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Navbar Accogliente -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-dice-d20"></i> TablHero
+            </a>
+            <div class="nav-toggle" id="navToggle">
+                <span></span><span></span><span></span>
+            </div>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">Chi Siamo</a></li>
+                <li><a href="events.html">Eventi</a></li>
+                <li><a href="membership.html">Membership</a></li>
+                <li><a href="collabs.html" class="active">Collaborazioni</a></li>
+                <li><a href="contacts.html">Contatti</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- HERO MEMBERSHIP -->
+    <section id="hero-membership" class="hero-about">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <h1 class="hero-title glow-text">Membership TablHero</h1>
+            <p class="hero-subtitle">Scegli il tuo livello di coinvolgimento nella nostra community!</p>
+        </div>
+    </section>
+
+    <!-- Membership Section -->
+    <section id="membership" class="features">
+        <div class="container">
+            <!-- Membership Tiers Section -->
+            <div class="membership-tiers-section">
+                <h2 class="section-title">Scegli il Tuo Livello di Membership</h2>
+                <div class="tiers-grid">
+                    <!-- Sidekicks Card -->
+                    <div class="tier-card" data-tier="sidekicks">
+                        <div class="tier-header">
+                            <div class="tier-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>Sidekicks</h3>
+                        </div>
+                        <div class="tier-price">
+                            <span class="price">Gratuito per Sempre</span>
+                        </div>
+                        <ul class="tier-features">
+                            <li><i class="fas fa-check"></i> Accesso al calendario eventi pubblici</li>
+                            <li><i class="fas fa-check"></i> RSVP di base alle sessioni</li>
+                            <li><i class="fas fa-check"></i> Accesso al forum della community</li>
+                            <li><i class="fas fa-check"></i> 1 evento al mese</li>
+                        </ul>
+                        <button class="tier-btn outline-btn" data-tier="sidekicks">Inizia Gratuitamente</button>
+                    </div>
+
+                    <!-- Heroes Card -->
+                    <div class="tier-card popular" data-tier="heroes">
+                        <div class="tier-badge">Popolare</div>
+                        <div class="tier-header">
+                            <div class="tier-icon">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <h3>TablHeroes</h3>
+                        </div>
+                        <div class="tier-price">
+                            <span class="price">€4.99/mese</span>
+                        </div>
+                        <ul class="tier-features">
+                            <li><i class="fas fa-check"></i> I vantaggi dei Sidekicks</li>
+                            <li><i class="fas fa-check"></i> RSVP illimitato agli eventi</li>
+                            <li><i class="fas fa-check"></i> Abbinamento prioritario Master-Giocatore</li>
+                            <li><i class="fas fa-check"></i> Canale Discord esclusivo</li>
+                            <li><i class="fas fa-check"></i> Boost punti XP 2x</li>
+                        </ul>
+                        <button class="tier-btn solid-btn" data-tier="heroes">Diventa un Eroe</button>
+                    </div>
+
+                    <!-- Super Heroes Card -->
+                    <div class="tier-card" data-tier="superheroes">
+                        <div class="tier-header">
+                            <div class="tier-icon">
+                                <i class="fas fa-shield-alt"></i>
+                                <i class="fas fa-crown"></i>
+                            </div>
+                            <h3>Super Heroes</h3>
+                        </div>
+                        <div class="tier-price">
+                            <span class="price">€9.99/mese</span>
+                        </div>
+                        <ul class="tier-features">
+                            <li><i class="fas fa-check"></i> I vantagi dei TablHeroes</li>
+                            <li><i class="fas fa-check"></i> Crea e ospita i tuoi eventi</li>
+                            <li><i class="fas fa-check"></i> Badge di verifica Master</li>
+                            <li><i class="fas fa-check"></i> Visibilità profilo in evidenza</li>
+                            <li><i class="fas fa-check"></i> Boost punti XP 3x</li>
+                            <li><i class="fas fa-check"></i> Accesso anticipato alle nuove funzionalità</li>
+                        </ul>
+                        <button class="tier-btn gradient-btn" data-tier="superheroes">Vai Super Eroe</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Leveling System Section -->
+            <div class="leveling-system-section">
+                <h2 class="section-title">Expa e sali di livello con TablExp:</h2>
+                <p class="section-subtitle">Guadagna XP partecipando agli eventi, ospitando sessioni e interagendo con la community</p>
+
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="milestones">
+                        <div class="milestone" data-level="bronze" data-xp="0-500">
+                            <div class="milestone-icon bronze">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="milestone-info">
+                                <h4>Bronzo</h4>
+                                <span>0-500 XP</span>
+                                <div class="milestone-benefits">
+                                    <small>Rango iniziale</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="milestone" data-level="silver" data-xp="501-1500">
+                            <div class="milestone-icon silver">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="milestone-info">
+                                <h4>Argento</h4>
+                                <span>501-1,500 XP</span>
+                                <div class="milestone-benefits">
+                                    <small>+10% sconto eventi</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="milestone" data-level="gold" data-xp="1501-3500">
+                            <div class="milestone-icon gold">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="milestone-info">
+                                <h4>Oro</h4>
+                                <span>1,501-3,500 XP</span>
+                                <div class="milestone-benefits">
+                                    <small>+Badge profilo personalizzato + 20% sconto</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="milestone" data-level="platinum" data-xp="3501-7500">
+                            <div class="milestone-icon platinum">
+                                <i class="fas fa-shield-alt"></i>
+                            </div>
+                            <div class="milestone-info">
+                                <h4>Platino</h4>
+                                <span>3,501-7,500 XP</span>
+                                <div class="milestone-benefits">
+                                    <small>+Supporto prioritario + Accesso eventi VIP</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="milestone" data-level="diamond" data-xp="7501+">
+                            <div class="milestone-icon diamond">
+                                <i class="fas fa-gem"></i>
+                            </div>
+                            <div class="milestone-info">
+                                <h4>Diamante</h4>
+                                <span>7,501+ XP</span>
+                                <div class="milestone-benefits">
+                                    <small>+Merch esclusivo + Pass annuale convention</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Registration Form Section -->
+            <div class="registration-form-section">
+                <div class="form-container">
+                    <form class="membership-form" id="membershipForm">
+                        <h2 class="section-title">Unisciti a TablHero</h2>
+
+                        <!-- Membership Tier Selection -->
+                        <div class="form-group">
+                            <label>Seleziona Livello di Membership:</label>
+                            <div class="tier-selector">
+                                <label class="tier-option">
+                                    <input type="radio" name="membershipTier" value="sidekicks">
+                                    <span class="tier-radio-card">
+                                        <strong>Sidekicks</strong><br>
+                                        <small>Gratuito per Sempre</small>
+                                    </span>
+                                </label>
+                                <label class="tier-option">
+                                    <input type="radio" name="membershipTier" value="heroes" checked>
+                                    <span class="tier-radio-card popular">
+                                        <strong>Eroi</strong><br>
+                                        <small>€4.99/mese</small>
+                                    </span>
+                                </label>
+                                <label class="tier-option">
+                                    <input type="radio" name="membershipTier" value="superheroes">
+                                    <span class="tier-radio-card">
+                                        <strong>Super Eroi</strong><br>
+                                        <small>€9.99/mese</small>
+                                    </span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <!-- Existing Form Fields -->
+                        <div class="form-group">
+                            <label for="fullName">Nome Completo</label>
+                            <input type="text" id="fullName" name="fullName" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input type="password" id="password" name="password" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="userType">Sei un:</label>
+                            <select id="userType" name="userType" required>
+                                <option value="">Seleziona...</option>
+                                <option value="player">Giocatore</option>
+                                <option value="master">Master</option>
+                                <option value="organizer">Organizzatore</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Giochi Preferiti:</label>
+                            <div class="checkbox-group">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="games" value="dnd">
+                                    <span class="checkmark"></span>
+                                    D&D
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="games" value="pathfinder">
+                                    <span class="checkmark"></span>
+                                    Pathfinder
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="games" value="boardgames">
+                                    <span class="checkmark"></span>
+                                    Giochi da Tavolo
+                                </label>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" name="games" value="other">
+                                    <span class="checkmark"></span>
+                                    Altri
+                                </label>
+                            </div>
+                        </div>
+
+                        <div class="form-group checkbox-single">
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="privacy" name="privacy" required>
+                                <span class="checkmark"></span>
+                                Accetto l'Informativa sulla Privacy e i Termini di Servizio
+                            </label>
+                        </div>
+
+                        <button type="submit" class="form-submit-btn" id="submitBtn">Crea Account e Unisciti</button>
+                    </form>
+                </div>
+            </div>
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <i class="fas fa-dice-d20"></i> TablHero
+                    <p>La tua community per giochi da tavolo e RPG</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Home</a>
+                    <a href="about.html">Chi Siamo</a>
+                    <a href="events.html">Eventi</a>
+                    <a href="membership.html">Membership</a>
+                    <a href="collabs.html">Collaborazioni</a>
+                    <a href="contacts.html">Contatti</a>
+                </div>
+                <div class="footer-social">
+                    <a href="#"><i class="fab fa-discord"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                    <a href="#"><i class="fab fa-youtube"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 TablHero. Tutti i dadi rotolano per te ❤️</p>
+            </div>
+        </div>
+    </footer>
+    <script src="script.js"></script>
+    <script>
+        // INIT PER QUESTA PAGINA
+        document.addEventListener('DOMContentLoaded', async function() {
+            initNavbar();
+            initMembershipPage();
+        });
+    </script>
+</body>
+</html>
