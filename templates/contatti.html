@@ -1,0 +1,103 @@
+<!-- templates/contatti.html -->
+{% extends "base.html" %}
+
+{% block title %}Contatti{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">📞 Contattaci</h1>
+
+    <div class="contact-grid">
+        <div class="card">
+            <h2>💬 Social Media</h2>
+            <p>Seguici sui nostri canali social per rimanere aggiornato su eventi e novità!</p>
+
+            <div class="social-buttons">
+                <a href="https://instagram.com/tablehero" target="_blank" class="social-btn instagram">
+                    📷 Instagram
+                </a>
+                <a href="https://wa.me/..." target="_blank" class="social-btn whatsapp">
+                    💬 WhatsApp
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>📍 Dove Siamo</h2>
+            <p><strong>TablHero</strong></p>
+            <p>📍 Gioia del Colle (BA)</p>
+            <p>🇮🇹 Puglia, Italia</p>
+
+            <h3 style="margin-top: 2rem;">I Founders</h3>
+            <ul class="founders-list">
+                <li>👤 Domenico Longo</li>
+                <li>👤 Alessandro Palmisano</li>
+                <li>👤 Giuseppe La Selva</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>✉️ Hai Domande?</h2>
+        <p>
+            Per informazioni, collaborazioni o qualsiasi domanda, contattaci tramite i nostri
+            canali social. Siamo sempre felici di rispondere alla community!
+        </p>
+        <p style="margin-top: 1rem;">
+            Se sei interessato a diventare <strong>Game Architect</strong> o vuoi proporre
+            un evento speciale, non esitare a contattarci!
+        </p>
+    </div>
+</div>
+
+<style>
+    .contact-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .social-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-top: 1.5rem;
+    }
+
+    .social-btn {
+        display: block;
+        padding: 1rem;
+        border-radius: 8px;
+        text-align: center;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+        transition: transform 0.3s;
+    }
+
+    .social-btn:hover {
+        transform: translateY(-3px);
+    }
+
+    .social-btn.instagram {
+        background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+        color: white;
+    }
+
+    .social-btn.whatsapp {
+        background: #25D366;
+        color: white;
+    }
+
+    .founders-list {
+        list-style: none;
+        margin-top: 1rem;
+    }
+
+    .founders-list li {
+        padding: 0.5rem 0;
+        font-size: 1.1rem;
+    }
+</style>
+{% endblock %}

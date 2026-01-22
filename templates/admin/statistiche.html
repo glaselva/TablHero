@@ -1,0 +1,174 @@
+<!-- templates/admin/statistiche.html -->
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Statistiche Dettagliate - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">📊 Statistiche Dettagliate</h1>
+
+    <!-- Statistiche per livello -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h3>🏆 Distribuzione Livelli TablExp</h3>
+            <div class="row">
+                {% for livello, count in stats_livelli.items() %}
+                <div class="col-md-2">
+                    <div class="livello-card livello-{{ livello }}">
+                        <div class="livello-name">{{ livello.title() }}</div>
+                        <div class="livello-count">{{ count }}</div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Top 10 Utenti -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h3>👑 Top 10 Leaderboard Completo</h3>
+            <div class="leaderboard">
+                {% for user in top_users %}
+                <div class="leaderboard-item">
+                    <div class="leaderboard-rank">#{{ loop.index }}</div>
+                    <div class="leaderboard-info">
+                        <div class="leaderboard-name">{{ user.nome }} {{ user.cognome }}</div>
+                        <div class="leaderboard-nickname">@{{ user.nickname }}</div>
+                    </div>
+                    <div class="leaderboard-exp">{{ user.tabl_exp }} EXP</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Eventi più popolari -->
+        <div class="col-md-6">
+            <h3>🎲 Eventi Più Popolari</h3>
+            <div class="eventi-popolari">
+                {% for evento, partecipanti in eventi_popolari %}
+                <div class="evento-popolare">
+                    <div class="evento-info">
+                        <h5>{{ evento.titolo }}</h5>
+                        <p class="text-muted">{{ evento.data_evento.strftime('%d/%m/%Y') }}</p>
+                        <p class="text-muted">{{ evento.tipo | replace('_', ' ') | title }}</p>
+                    </div>
+                    <div class="evento-partecipanti">
+                        <span class="badge badge-primary">{{ partecipanti }} 👥</span>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.livello-card {
+    background: var(--grigio-scuro);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    margin: 10px 0;
+    border: 2px solid;
+}
+
+.livello-bronzo { border-color: #CD7F32; }
+.livello-argento { border-color: #C0C0C0; }
+.livello-oro { border-color: #FFD700; }
+.livello-platino { border-color: #E5E4E2; }
+.livello-diamante { border-color: #B9F2FF; }
+
+.livello-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--giallo-tablhero);
+    margin-bottom: 10px;
+}
+
+.livello-count {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--bianco);
+}
+
+.leaderboard {
+    background: var(--grigio-scuro);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.leaderboard-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.leaderboard-item:last-child {
+    border-bottom: none;
+}
+
+.leaderboard-rank {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--giallo-tablhero);
+    width: 50px;
+    text-align: center;
+}
+
+.leaderboard-info {
+    flex: 1;
+}
+
+.leaderboard-name {
+    font-weight: bold;
+    color: var(--bianco);
+    margin-bottom: 2px;
+}
+
+.leaderboard-nickname {
+    font-size: 0.9rem;
+    color: var(--giallo-tablhero);
+}
+
+.leaderboard-exp {
+    font-weight: bold;
+    color: var(--rosso-rubino);
+    font-size: 1.1rem;
+}
+
+.eventi-popolari {
+    max-height: 500px;
+    overflow-y: auto;
+}
+
+.evento-popolare {
+    background: var(--grigio-scuro);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid var(--rosso-rubino);
+}
+
+.evento-popolare h5 {
+    margin: 0 0 5px 0;
+    color: var(--giallo-tablhero);
+}
+
+.evento-popolare p {
+    margin: 0;
+    font-size: 0.9rem;
+}
+
+.badge-primary {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 1rem;
+    padding: 8px 12px;
+}
+</style>
+{% endblock %}

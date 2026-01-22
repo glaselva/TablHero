@@ -1,0 +1,13 @@
+Email: giuseppe@tablehero.it
+Password: NuovaPassword123!
+
+Email: domenico@tablehero.it
+Password: NuovaPassword123!
+
+Email: alessandro@tablehero.it
+Password: NuovaPassword123!
+
+Email: veteran(x)@tablhero.it
+Password: VeteranPass123!
+
+ngrok http 5000

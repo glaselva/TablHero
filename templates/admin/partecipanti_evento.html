@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block title %}Partecipanti Evento - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>👥 Partecipanti Evento</h1>
+
+    <!-- Info Evento -->
+    <div class="card evento-info">
+        <h2>{{ evento.titolo }}</h2>
+        <div class="evento-details">
+            <p><strong>Tipo:</strong>
+                <span class="badge">
+                    {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                    {{ evento.tipo.replace('_', ' ').title() }}
+                </span>
+            </p>
+            <p><strong>Data:</strong>
+                {% if evento.data_evento %}
+                    {{ evento.data_evento.strftime('%d/%m/%Y %H:%M') }}
+                {% else %}
+                    <em>Non impostata</em>
+                {% endif %}
+            </p>
+            <p><strong>Partecipanti:</strong>
+                {% if evento.max_partecipanti %}
+                    {{ partecipazioni|length }}/{{ evento.max_partecipanti }}
+                {% else %}
+                    {{ partecipazioni|length }}
+                {% endif %}
+            </p>
+            <p><strong>EXP Reward:</strong> {{ evento.exp_reward }}</p>
+        </div>
+        <div class="evento-actions">
+            <a href="{{ url_for('admin.edit_evento', evento_id=evento.id) }}" class="btn btn-secondary">
+                ✏️ Modifica Evento
+            </a>
+            <a href="{{ url_for('admin.gestione_eventi') }}" class="btn btn-secondary">
+                ← Torna agli Eventi
+            </a>
+        </div>
+    </div>
+
+    {% if partecipazioni %}
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Utente</th>
+                    <th>Livello</th>
+                    <th>Ruolo</th>
+                    <th>Data Partecipazione</th>
+                    <th>EXP Guadagnata</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for partecipazione in partecipazioni %}
+                <tr>
+                    <td>
+                        <div class="user-info">
+                            <strong>{{ partecipazione.user.nickname }}</strong>
+                            <br>
+                            <small>{{ partecipazione.user.nome }} {{ partecipazione.user.cognome }}</small>
+                            <br>
+                            <small class="text-muted">{{ partecipazione.user.email }}</small>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="badge livello-badge livello-{{ partecipazione.user.livello }}">
+                            {{ partecipazione.user.livello.title() }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="badge ruolo-badge">
+                            {{ partecipazione.user.ruolo.title() }}
+                        </span>
+                    </td>
+                    <td>{{ partecipazione.data_partecipazione.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        {% if partecipazione.exp_guadagnata %}
+                            <span class="exp-gained">+{{ partecipazione.exp_guadagnata }}</span>
+                        {% else %}
+                            <em>Non assegnata</em>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="card">
+        <p>Nessun partecipante per questo evento.</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.evento-info {
+    margin-bottom: 2rem;
+    background: var(--nero-bg);
+    border: 1px solid var(--grigio-scuro);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.evento-info h2 {
+    margin-top: 0;
+    color: var(--bianco);
+    font-size: 1.5rem;
+}
+
+.evento-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1rem 0;
+}
+
+.evento-details p {
+    margin: 0.5rem 0;
+    color: var(--bianco);
+}
+
+.evento-actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.admin-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 2rem 0;
+    background: var(--nero-bg);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.admin-table th,
+.admin-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid var(--grigio-scuro);
+}
+
+.admin-table th {
+    background: var(--rosso-rubino);
+    color: var(--bianco);
+    font-weight: 600;
+}
+
+.admin-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.user-info {
+    line-height: 1.4;
+}
+
+.user-info small {
+    color: var(--grigio-chiaro);
+}
+
+.badge {
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.livello-badge {
+    background: var(--giallo-tablhero);
+    color: var(--nero-bg);
+}
+
+.ruolo-badge {
+    background: var(--grigio-scuro);
+    color: var(--bianco);
+}
+
+.exp-gained {
+    color: var(--verde);
+    font-weight: 600;
+}
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.text-muted {
+    color: var(--grigio-chiaro) !important;
+}
+</style>
+{% endblock %}

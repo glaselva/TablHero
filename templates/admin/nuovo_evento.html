@@ -1,0 +1,73 @@
+<!-- templates/admin/nuovo_evento.html -->
+{% extends "base.html" %}
+
+{% block title %}Nuovo Evento{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-container">
+        <div class="card">
+            <h2>➕ Crea Nuovo Evento</h2>
+            
+            <form method="POST" action="{{ url_for('admin.nuovo_evento') }}">
+                
+                <div class="form-group">
+                    <label for="titolo">Titolo Evento *</label>
+                    <input type="text" id="titolo" name="titolo" required 
+                           placeholder="Es. Serata Catan">
+                </div>
+
+                <div class="form-group">
+                    <label for="descrizione">Descrizione</label>
+                    <textarea id="descrizione" name="descrizione" rows="4" 
+                              placeholder="Descrizione dell'evento..."></textarea>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="tipo">Tipo Evento *</label>
+                        <select id="tipo" name="tipo" required>
+                            <option value="">-- Seleziona --</option>
+                            <option value="giochi_tavolo">🎲 Giochi da Tavolo</option>
+                            <option value="giochi_ruolo">⚔️ Giochi di Ruolo</option>
+                        </select>
+                    </div>
+                    
+                    <!-- ✅ CAMPO DATA SINGOLO E PULITO -->
+                    <div class="form-group">
+                        <label for="data_evento">Data e Ora *</label>
+                        <input type="datetime-local" id="data_evento" name="data_evento" 
+                               required step="900">
+                        <small>🇮🇹 GG/MM/AAAA HH:MM - Seleziona dalla finestra</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="max_partecipanti">Max Partecipanti (opzionale)</label>
+                        <input type="number" id="max_partecipanti" name="max_partecipanti" 
+                               min="1" placeholder="Illimitato">
+                    </div>
+                    <div class="form-group">
+                        <label for="exp_reward">TablExp Ricompensa *</label>
+                        <input type="number" id="exp_reward" name="exp_reward" 
+                               value="50" min="0" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="immagine_url">URL Immagine (opzionale)</label>
+                    <input type="url" id="immagine_url" name="immagine_url" 
+                           placeholder="https://esempio.com/immagine.jpg">
+                    <small>Immagine con rapporto 16:9 per migliori risultati</small>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Crea Evento</button>
+                    <a href="{{ url_for('admin.gestione_eventi') }}" class="btn btn-secondary">Annulla</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

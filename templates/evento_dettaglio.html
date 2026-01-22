@@ -1,0 +1,228 @@
+{% extends "base.html" %}
+
+{% block title %}Dettaglio Evento - {{ evento.titolo }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="evento-dettaglio">
+        <div class="evento-header">
+            <div class="evento-image-large">
+                {% if evento.immagine_url %}
+                <img src="{{ evento.immagine_url }}" alt="{{ evento.titolo }}">
+                {% else %}
+                {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                {% endif %}
+            </div>
+
+            <div class="evento-header-info">
+                <h1>{{ evento.titolo }}</h1>
+                <div class="evento-meta">
+                    <div class="meta-item">
+                        <strong>Tipo:</strong> {{ evento.tipo.replace('_', ' ').title() }}
+                    </div>
+                    <div class="meta-item">
+                        <strong>Data:</strong> {{ evento.data_evento.strftime('%d/%m/%Y alle %H:%M') if
+                        evento.data_evento else 'Non specificata' }}
+                    </div>
+                    <div class="meta-item">
+                        <strong>Partecipanti:</strong>
+                        {% if evento.max_partecipanti %}
+                        {% if evento.data_evento and evento.data_evento < now and evento.override_partecipanti is not
+                            none %} {{ evento.override_partecipanti }}/{{ evento.max_partecipanti }} {% else %} {{
+                            evento.partecipazioni | length }}/{{ evento.max_partecipanti }} {% endif %} {% else %} {% if
+                            evento.data_evento and evento.data_evento < now and evento.override_partecipanti is not none
+                            %} {{ evento.override_partecipanti }} {% else %} {{ evento.partecipazioni | length }} {%
+                            endif %} {% endif %} </div>
+                            <div class="meta-item">
+                                <strong>Ricompensa:</strong> ⭐ {{ evento.exp_reward }} TablExp
+                            </div>
+                    </div>
+                </div>
+            </div>
+
+            {% if request.args.get('pagato') == '1' %}
+            <div class="iscrizione-status success">
+                ✅ Pagamento completato! Sei stato automaticamente iscritto all'evento e hai ricevuto {{
+                evento.exp_reward }}
+                TablExp!
+            </div>
+            {% endif %}
+
+            {% if gia_iscritto %}
+            <div class="iscrizione-status success">
+                ✅ Sei iscritto a questo evento!
+                <div style="margin-top: 1rem;">
+                    <form method="POST" action="{{ url_for('eventi.annulla_iscrizione', evento_id=evento.id) }}"
+                        onsubmit="return confirm('Sei sicuro di voler annullare l\'iscrizione? Perderai i TablExp guadagnati da questo evento.');">
+                        <button type="submit" class="btn" style="background: var(--rosso-rubino); color: white;">❌
+                            Annulla
+                            Iscrizione</button>
+                    </form>
+                </div>
+            </div>
+            {% else %}
+            {% if current_user.is_authenticated %}
+            {% if current_user.ruolo == 'founder' %}
+            <!-- Founder possono partecipare GRATIS -->
+            <div class="card">
+                <h3>💳 Partecipa all'evento</h3>
+                <p>Come Founder, puoi partecipare gratuitamente a tutti gli eventi!</p>
+                <form method="POST" action="{{ url_for('eventi.iscriviti', evento_id=evento.id) }}">
+                    <button type="submit" class="btn btn-success">🎯 Iscriviti GRATIS</button>
+                </form>
+            </div>
+            {% elif current_user.ruolo in ['tablhero', 'game_architect'] %}
+            <!-- TablHero e Game Architect possono pagare con sconto -->
+            <div class="card">
+                <h3>💳 Partecipa all'evento</h3>
+                <p>Come membro premium, puoi partecipare con uno sconto speciale!</p>
+                <form method="POST" action="{{ url_for('eventi.paga_evento', evento_id=evento.id) }}">
+                    <button type="submit" class="btn btn-primary">
+                        💳 Paga con Sconto
+                        {% if current_user.ruolo == 'tablhero' %}
+                        (25% off)
+                        {% elif current_user.ruolo == 'game_architect' %}
+                        (50% off)
+                        {% endif %}
+                    </button>
+                </form>
+            </div>
+            {% elif current_user.ha_pagato %}
+            <!-- Veteran possono pagare -->
+            <div class="card">
+                <h3>💳 Partecipa all'evento</h3>
+                <p>Come membro attivo, puoi partecipare pagando l'evento.</p>
+                <form method="POST" action="{{ url_for('eventi.paga_evento', evento_id=evento.id) }}">
+                    <button type="submit" class="btn btn-primary">💳 Paga Evento</button>
+                </form>
+            </div>
+            {% else %}
+            <!-- Utente senza membership -->
+            <div class="card">
+                <h3>💳 Partecipa all'evento</h3>
+                <p>Per partecipare agli eventi, devi avere una membership attiva.</p>
+                <a href="{{ url_for('dashboard.index') }}" class="btn btn-primary">
+                    💳 Acquista Membership (25€/anno)
+                </a>
+            </div>
+            {% endif %}
+            {% else %}
+            <!-- Utente non autenticato -->
+            <div class="card">
+                <h3>🔐 Accedi per partecipare</h3>
+                <p>Effettua il login per iscriverti a questo evento.</p>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-primary">
+                    🔑 Accedi
+                </a>
+            </div>
+            {% endif %}
+            {% endif %}
+
+            <div class="card">
+                <h3>📝 Descrizione</h3>
+                <p>{{ evento.descrizione | nl2br | safe }}</p>
+            </div>
+
+            <div class="card">
+                <h3>👥 Iscritti ({{ evento.partecipazioni | length }})</h3>
+                {% for p in evento.partecipazioni %}
+                <span class="badge-user">{{ p.user.nickname }}</span>
+                {% endfor %}
+            </div>
+
+            <a href="{{ url_for('eventi.lista') }}" class="btn btn-secondary">← Torna agli Eventi</a>
+        </div>
+    </div>
+
+
+    <style>
+        .evento-dettaglio {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .evento-header {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .evento-image-large {
+            width: 100%;
+            height: 400px;
+            background: var(--grigio-scuro);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 8rem;
+            border: 2px solid var(--rosso-rubino);
+        }
+
+        .evento-image-large img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .evento-header-info h1 {
+            color: var(--giallo-tablhero);
+            margin: 1rem 0;
+        }
+
+        .evento-meta {
+            background: var(--grigio-scuro);
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 1.5rem 0;
+        }
+
+        .meta-item {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--nero-bg);
+        }
+
+        .meta-item:last-child {
+            border-bottom: none;
+        }
+
+        .meta-item strong {
+            color: var(--giallo-tablhero);
+        }
+
+        .iscrizione-status {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid #4caf50;
+            padding: 1rem;
+            border-radius: 8px;
+            color: #81c784;
+            text-align: center;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        @media (max-width: 768px) {
+            .evento-header {
+                grid-template-columns: 1fr;
+            }
+
+            .evento-image-large {
+                height: 250px;
+            }
+        }
+
+        .iscrizione-status.warning {
+            background: rgba(255, 152, 0, 0.2);
+            border: 2px solid #ff9800;
+            color: #ffb74d;
+        }
+
+        .iscrizione-status.success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 2px solid #4caf50;
+            color: #81c784;
+        }
+    </style>
+    {% endblock %}

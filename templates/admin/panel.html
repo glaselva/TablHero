@@ -1,0 +1,287 @@
+<!-- templates/admin/panel.html -->
+{% extends "base.html" %}
+
+{% block title %}Admin Panel{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="admin-header">
+        <h1>🛡️ Pannello Amministratore</h1>
+        <p>Benvenuto, {{ current_user.nickname }}</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ total_users }}</div>
+            <div class="stat-label">Utenti Totali</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_eventi }}</div>
+            <div class="stat-label">Eventi Totali</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_partecipazioni }}</div>
+            <div class="stat-label">Partecipazioni</div>
+        </div>
+    </div>
+
+    <section>
+        <h2>Distribuzione Ruoli</h2>
+        <div class="role-stats">
+            <a href="{{ url_for('admin.gestione_utenti', ruolo='sidekick') }}" class="role-stat-item clickable">
+                <span class="role-name">👤 Sidekick</span>
+                <span class="role-count">{{ sidekick_count }}</span>
+            </a>
+            <a href="{{ url_for('admin.gestione_utenti', ruolo='tablhero') }}" class="role-stat-item clickable">
+                <span class="role-name">⭐ TablHero</span>
+                <span class="role-count">{{ tablhero_count }}</span>
+            </a>
+            <a href="{{ url_for('admin.gestione_utenti', ruolo='veteran') }}" class="role-stat-item clickable">
+                <span class="role-name">🎖️ Veteran</span>
+                <span class="role-count">{{ veteran_count }}</span>
+            </a>
+            <a href="{{ url_for('admin.gestione_utenti', ruolo='master') }}" class="role-stat-item clickable">
+                <span class="role-name">🧠 Master</span>
+                <span class="role-count">{{ master_count }}</span>
+            </a>
+            <a href="{{ url_for('admin.gestione_utenti', ruolo='architect') }}" class="role-stat-item clickable">
+                <span class="role-name">🏗️ Architect</span>
+                <span class="role-count">{{ architect_count }}</span>
+            </a>
+            <a href="{{ url_for('admin.gestione_utenti', ruolo='coordinator') }}" class="role-stat-item clickable">
+                <span class="role-name">📋 Coordinator</span>
+                <span class="role-count">{{ coordinator_count }}</span>
+            </a>
+
+        </div>
+    </section>
+
+    <div class="admin-actions">
+        <a href="{{ url_for('admin.gestione_utenti') }}" class="admin-card">
+            <div class="admin-icon">👥</div>
+            <h3>Gestione Utenti</h3>
+            <p>Visualizza, modifica ed elimina utenti</p>
+        </a>
+        <a href="{{ url_for('admin.gestione_eventi') }}" class="admin-card">
+            <div class="admin-icon">📅</div>
+            <h3>Gestione Eventi</h3>
+            <p>Crea e gestisci eventi e partecipazioni</p>
+        </a>
+
+        <a href="{{ url_for('admin.statistiche') }}" class="admin-card">
+            <div class="admin-icon">📊</div>
+            <h3>Statistiche</h3>
+            <p>Visualizza statistiche dettagliate</p>
+        </a>
+    </div>
+
+    <section>
+        <h2>Ultimi Utenti Registrati</h2>
+        <div class="table-responsive">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Nickname</th>
+                        <th>Email</th>
+                        <th>Ruolo</th>
+                        <th>TablExp</th>
+                        <th>Data Registrazione</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in ultimi_utenti %}
+                    <tr>
+                        <td><strong>{{ user.nickname }}</strong></td>
+                        <td>{{ user.email }}</td>
+                        <td><span class="badge badge-{{ user.ruolo }}">{{ user.ruolo | replace('_', ' ') | title
+                                }}</span></td>
+                        <td>{{ user.tabl_exp }}</td>
+                        <td>{{ user.data_registrazione.strftime('%d/%m/%Y') }}</td>
+                        <td>
+                            <a href="{{ url_for('admin.edit_utente', user_id=user.id) }}"
+                                class="btn-small btn-secondary">Modifica</a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section>
+        <h2>Prossimi Eventi</h2>
+        <div class="events-grid">
+            {% for evento in prossimi_eventi %}
+            <div class="event-card">
+                <div class="event-image">
+                    {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                </div>
+                <div class="event-content">
+                    <span class="event-type">{{ evento.tipo | replace('_', ' ') | title }}</span>
+                    <h3>{{ evento.titolo }}</h3>
+                    <p>📅 {{ evento.data_evento.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p>👥 {{ evento.partecipazioni | length }} partecipanti</p>
+                    <a href="{{ url_for('admin.edit_evento', evento_id=evento.id) }}"
+                        class="btn btn-secondary">Gestisci</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<style>
+    .admin-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+
+    .admin-header h1 {
+        color: var(--giallo-tablhero);
+        margin-bottom: 0.5rem;
+    }
+
+    .admin-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 2rem;
+        margin: 3rem 0;
+    }
+
+    .admin-card {
+        background: var(--grigio-scuro);
+        padding: 2rem;
+        border-radius: 10px;
+        border: 2px solid var(--rosso-rubino);
+        text-align: center;
+        text-decoration: none;
+        color: var(--bianco);
+        transition: transform 0.3s;
+    }
+
+    .admin-card:hover {
+        transform: translateY(-5px);
+        border-color: var(--giallo-tablhero);
+    }
+
+    .admin-icon {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+    }
+
+    .admin-card h3 {
+        color: var(--giallo-tablhero);
+        margin-bottom: 0.5rem;
+    }
+
+    .role-stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin: 1rem 0;
+    }
+
+    .role-stat-item {
+        background: var(--grigio-scuro);
+        padding: 1.5rem;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-left: 4px solid var(--rosso-rubino);
+        transition: all 0.3s ease;
+    }
+
+    .role-stat-item.clickable {
+        text-decoration: none;
+        color: inherit;
+    }
+
+    .role-stat-item.clickable:hover {
+        transform: translateY(-2px);
+        border-color: var(--giallo-tablhero);
+        box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+        cursor: pointer;
+    }
+
+    .role-name {
+        font-weight: 600;
+    }
+
+    .role-count {
+        font-size: 1.5rem;
+        color: var(--giallo-tablhero);
+        font-weight: bold;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 1rem;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--grigio-scuro);
+    }
+
+    .admin-table th {
+        background: var(--grigio-scuro);
+        color: var(--giallo-tablhero);
+        font-weight: 600;
+    }
+
+    .admin-table tbody tr:hover {
+        background: rgba(155, 17, 30, 0.1);
+    }
+
+    .badge {
+        padding: 0.25rem 0.75rem;
+        border-radius: 12px;
+        font-size: 0.85rem;
+        font-weight: 600;
+    }
+
+    .badge-sidekick {
+        background: #666;
+    }
+
+    .badge-tablhero {
+        background: var(--rosso-rubino);
+    }
+
+    .badge-veteran {
+        background: #8B4513;
+        /* Saddle brown for veteran */
+    }
+
+    .badge-game_architect {
+        background: var(--giallo-tablhero);
+        color: var(--nero-bg);
+    }
+
+    .badge-master {
+        background: #8A2BE2;
+    }
+
+    .badge-architect {
+        background: #FF6347;
+    }
+
+    .badge-coordinator {
+        background: #20B2AA;
+    }
+
+    .btn-small {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}

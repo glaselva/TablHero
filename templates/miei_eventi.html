@@ -1,0 +1,165 @@
+<!-- templates/miei_eventi.html -->
+{% extends "base.html" %}
+
+{% block title %}I Miei Eventi{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>📜 I Miei Eventi</h1>
+    <p class="subtitle">Storico completo delle tue partecipazioni</p>
+
+    {% if partecipazioni %}
+        <div class="partecipazioni-list">
+            {% for partecipazione in partecipazioni %}
+            <div class="partecipazione-item-detailed">
+                <div class="evento-icon">
+                    {% if partecipazione.evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                </div>
+                <div class="evento-info">
+                    <h3>{{ partecipazione.evento.titolo }}</h3>
+                    <span class="event-type-badge">{{ partecipazione.evento.tipo | replace('_', ' ') | title }}</span>
+                    <p>📅 {{ partecipazione.evento.data_evento.strftime('%d/%m/%Y alle %H:%M') }}</p>
+                    {% if partecipazione.evento.descrizione %}
+                    <p class="evento-description">{{ partecipazione.evento.descrizione[:100] }}...</p>
+                    {% endif %}
+                </div>
+                <div class="evento-stats">
+                    <div class="exp-earned">
+                        <span class="exp-value">+{{ partecipazione.exp_guadagnata }}</span>
+                        <span class="exp-label">TablExp</span>
+                    </div>
+                    <div class="partecipazione-date">
+                        Partecipato il {{ partecipazione.data_partecipazione.strftime('%d/%m/%Y') }}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="stats-summary card">
+            <h3>📊 Riepilogo</h3>
+            <div class="summary-stats">
+                <div>
+                    <strong>{{ partecipazioni | length }}</strong>
+                    <span>Eventi Totali</span>
+                </div>
+                <div>
+                    <strong>{{ partecipazioni | sum(attribute='exp_guadagnata') }}</strong>
+                    <span>TablExp Guadagnata</span>
+                </div>
+            </div>
+        </div>
+    {% else %}
+        <div class="card">
+            <p>Non hai ancora partecipato a nessun evento. Esplora gli <a href="{{ url_for('eventi.lista') }}">eventi disponibili</a>!</p>
+        </div>
+    {% endif %}
+
+    <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary">← Torna alla Dashboard</a>
+</div>
+
+<style>
+.subtitle {
+    color: var(--grigio-chiaro);
+    margin-bottom: 2rem;
+}
+
+.partecipazione-item-detailed {
+    background: var(--grigio-scuro);
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border-left: 4px solid var(--rosso-rubino);
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+}
+
+.evento-icon {
+    font-size: 3rem;
+}
+
+.evento-info h3 {
+    color: var(--giallo-tablhero);
+    margin-bottom: 0.5rem;
+}
+
+.event-type-badge {
+    background: var(--rosso-rubino);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    color: var(--giallo-tablhero);
+}
+
+.evento-description {
+    color: var(--grigio-chiaro);
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.evento-stats {
+    text-align: right;
+}
+
+.exp-earned {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0.5rem;
+}
+
+.exp-value {
+    font-size: 2rem;
+    font-weight: bold;
+    color: var(--giallo-tablhero);
+}
+
+.exp-label {
+    font-size: 0.8rem;
+    color: var(--grigio-chiaro);
+}
+
+.partecipazione-date {
+    font-size: 0.85rem;
+    color: var(--grigio-chiaro);
+}
+
+.stats-summary {
+    margin-top: 2rem;
+    text-align: center;
+}
+
+.summary-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 1rem;
+}
+
+.summary-stats div {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.summary-stats strong {
+    font-size: 2rem;
+    color: var(--giallo-tablhero);
+}
+
+.summary-stats span {
+    color: var(--grigio-chiaro);
+}
+
+@media (max-width: 768px) {
+    .partecipazione-item-detailed {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .evento-stats {
+        text-align: center;
+    }
+}
+</style>
+{% endblock %}

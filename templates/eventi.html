@@ -1,0 +1,117 @@
+<!-- templates/eventi.html -->
+{% extends "base.html" %}
+
+{% block title %}Eventi{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🎲 Eventi TablHero</h1>
+    <p class="subtitle">Scopri e partecipa ai nostri prossimi eventi!</p>
+
+    <div class="eventi-filter">
+        <a href="{{ url_for('eventi.lista') }}" class="filter-btn {% if not tipo_filtro %}active{% endif %}">
+            Tutti
+        </a>
+        <a href="{{ url_for('eventi.lista', tipo='giochi_tavolo') }}"
+            class="filter-btn {% if tipo_filtro == 'giochi_tavolo' %}active{% endif %}">
+            🎲 Giochi da Tavolo
+        </a>
+        <a href="{{ url_for('eventi.lista', tipo='giochi_ruolo') }}"
+            class="filter-btn {% if tipo_filtro == 'giochi_ruolo' %}active{% endif %}">
+            ⚔️ Giochi di Ruolo
+        </a>
+    </div>
+
+    {% if eventi %}
+    <div class="events-grid">
+        {% for evento in eventi %}
+        <div class="event-card">
+            <div class="event-image">
+                {% if evento.immagine_url %}
+                <img src="{{ evento.immagine_url }}" alt="{{ evento.titolo }}">
+                {% else %}
+                <div class="event-icon-placeholder">
+                    {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="event-content">
+                <span class="event-type">{{ evento.tipo | replace('_', ' ') | title }}</span>
+                <h3>{{ evento.titolo }}</h3>
+                <p>📅 {{ evento.data_evento.strftime('%d/%m/%Y alle %H:%M') }}</p>
+
+                {% if evento.max_partecipanti %}
+                {% if evento.data_evento and evento.data_evento < now and evento.override_partecipanti is not none %}
+                    <p>👥 {{ evento.override_partecipanti }} / {{ evento.max_partecipanti }} partecipanti</p>
+                    {% else %}
+                    <p>👥 {{ evento.partecipazioni | length }} / {{ evento.max_partecipanti }} partecipanti</p>
+                    {% endif %}
+                    {% else %}
+                    {% if evento.data_evento and evento.data_evento < now and evento.override_partecipanti is not none
+                        %} <p>👥 {{ evento.override_partecipanti }} partecipanti</p>
+                        {% else %}
+                        <p>👥 {{ evento.partecipazioni | length }} partecipanti</p>
+                        {% endif %}
+                        {% endif %}
+
+                        <p>⭐ +{{ evento.exp_reward }} TablExp</p>
+
+                        {% if evento.is_full() %}
+                        <button class="btn btn-secondary" disabled>🚫 Evento Completo</button>
+                        {% else %}
+                        <a href="{{ url_for('eventi.dettaglio', evento_id=evento.id) }}" class="btn btn-primary">
+                            Dettagli e Iscrizione
+                        </a>
+                        {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card">
+        <p>Nessun evento disponibile al momento. Torna presto per scoprire nuove avventure!</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- STILE FILTRI GIALLO SU ACTIVE - IDENTICO A PASSATI -->
+<style>
+    .eventi-filter {
+        display: flex;
+        gap: 1rem;
+        margin: 2rem 0;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .filter-btn {
+        padding: 0.75rem 1.5rem;
+        background: var(--glass-bg);
+        backdrop-filter: blur(15px);
+        border: 2px solid rgba(255, 215, 0, 0.3);
+        border-radius: 25px;
+        color: var(--text-warm);
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .filter-btn:hover {
+        background: rgba(255, 215, 0, 0.15);
+        border-color: var(--gold);
+        color: var(--gold);
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(255, 215, 0, 0.3);
+    }
+
+    .filter-btn.active {
+        background: linear-gradient(135deg, var(--gold), var(--red));
+        color: var(--dark-warm);
+        border-color: var(--gold);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    }
+</style>
+
+{% endblock %}

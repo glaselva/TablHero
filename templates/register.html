@@ -1,0 +1,154 @@
+<!-- templates/register.html -->
+{% extends "base.html" %}
+
+{% block title %}Registrazione{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-container">
+        <div class="card">
+            <h2>Unisciti a TablHero</h2>
+            <p class="subtitle">Inizia la tua avventura nella community nerd di Gioia del Colle</p>
+
+            <form method="POST" action="{{ url_for('auth.register') }}">
+                <div class="form-group">
+                    <label for="nickname">Nickname *</label>
+                    <input type="text" id="nickname" name="nickname" required placeholder="Il tuo nome da eroe">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome">Nome *</label>
+                        <input type="text" id="nome" name="nome" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cognome">Cognome *</label>
+                        <input type="text" id="cognome" name="cognome" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required placeholder="tua@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password *</label>
+                    <input type="password" id="password" name="password" required>
+                    <div class="password-requirements">
+                        <small>La password deve contenere:</small>
+                        <ul>
+                            <li>Almeno 8 caratteri</li>
+                            <li>Almeno 1 lettera maiuscola (A-Z)</li>
+                            <li>Almeno 1 lettera minuscola (a-z)</li>
+                            <li>Almeno 1 numero (0-9)</li>
+                            <li>Almeno 1 carattere speciale (@#$%^&+=!?*)</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Conferma Password *</label>
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                </div>
+        </div>
+
+        <div class="form-group">
+            <label for="ruolo">Scegli il tuo Ruolo *</label>
+            <select id="ruolo" name="ruolo" required onchange="updatePrice()">
+                <option value="">-- Seleziona --</option>
+                <option value="sidekick">Sidekick (Gratuito)</option>
+                <option value="tablhero">TablHero (20€)</option>
+            </select>
+            <div id="role-description" class="role-info"></div>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Registrati</button>
+        </form>
+
+        <p class="auth-footer">
+            Hai già un account? <a href="{{ url_for('auth.login') }}">Accedi qui</a>
+        </p>
+    </div>
+</div>
+</div>
+
+<style>
+    .auth-container {
+        max-width: 600px;
+        margin: 3rem auto;
+    }
+
+    .auth-container h2 {
+        color: var(--giallo-tablhero);
+        text-align: center;
+        margin-bottom: 0.5rem;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: var(--grigio-chiaro);
+        margin-bottom: 2rem;
+    }
+
+    .form-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 1rem;
+    }
+
+    .btn-full {
+        width: 100%;
+        margin-top: 1rem;
+    }
+
+    .auth-footer {
+        text-align: center;
+        margin-top: 1.5rem;
+        color: var(--grigio-chiaro);
+    }
+
+    .auth-footer a {
+        color: var(--giallo-tablhero);
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .role-info {
+        margin-top: 0.5rem;
+        padding: 1rem;
+        background: var(--nero-bg);
+        border-radius: 6px;
+        border-left: 4px solid var(--giallo-tablhero);
+        display: none;
+    }
+
+    .role-info.active {
+        display: block;
+    }
+</style>
+
+<script>
+    function updatePrice() {
+        const ruolo = document.getElementById('ruolo').value;
+        const description = document.getElementById('role-description');
+
+        const descriptions = {
+            'sidekick': {
+                text: '🎮 <strong>Sidekick</strong> - Accesso base gratuito agli eventi. Perfetto per iniziare!',
+                class: ''
+            },
+            'tablhero': {
+                text: '⭐ <strong>TablHero</strong> - Abbonamento completo (20€). Accesso prioritario agli eventi e vantaggi esclusivi.',
+                class: ''
+            }
+        };
+
+        if (ruolo && descriptions[ruolo]) {
+            description.innerHTML = descriptions[ruolo].text;
+            description.classList.add('active');
+        } else {
+            description.classList.remove('active');
+        }
+    }
+</script>
+{% endblock %}

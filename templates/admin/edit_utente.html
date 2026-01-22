@@ -1,0 +1,127 @@
+<!-- templates/admin/edit_utente.html -->
+{% extends "base.html" %}
+
+{% block title %}Modifica Utente{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="auth-container">
+        <div class="card">
+            <h2>✏️ Modifica Utente: {{ user.nickname }}</h2>
+
+            <form method="POST" action="{{ url_for('admin.edit_utente', user_id=user.id) }}">
+                <div class="form-group">
+                    <label for="nickname">Nickname</label>
+                    <input type="text" id="nickname" name="nickname" value="{{ user.nickname }}" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nome">Nome</label>
+                        <input type="text" id="nome" name="nome" value="{{ user.nome }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="cognome">Cognome</label>
+                        <input type="text" id="cognome" name="cognome" value="{{ user.cognome }}" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" name="email" value="{{ user.email }}" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="ruolo">Ruolo</label>
+                        <select id="ruolo" name="ruolo" class="form-control">
+                            <option value="sidekick" {% if user.ruolo=='sidekick' %}selected{% endif %}>Sidekick
+                            </option>
+                            <option value="tablhero" {% if user.ruolo=='tablhero' %}selected{% endif %}>TablHero
+                            </option>
+                            <option value="veteran" {% if user.ruolo=='veteran' %}selected{% endif %}>🎖️ Veteran
+                            </option>
+                            <option value="master" {% if user.ruolo=='master' %}selected{% endif %}>Master</option>
+                            <option value="architect" {% if user.ruolo=='architect' %}selected{% endif %}>Architect
+                            </option>
+                            <option value="coordinator" {% if user.ruolo=='coordinator' %}selected{% endif %}>
+                                Coordinator</option>
+                            <option value="founder" {% if user.ruolo=='founder' %}selected{% endif %}>👑 Founder
+                            </option>
+                        </select>
+
+                    </div>
+                    <div class="form-group">
+                        <label for="tabl_exp">TablExp</label>
+                        <input type="number" id="tabl_exp" name="tabl_exp" value="{{ user.tabl_exp }}" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="attivo" {% if user.attivo %}checked{% endif %}>
+                        Account Attivo
+                    </label>
+                </div>
+
+                <div class="form-group">
+                    <label for="new_password">Nuova Password (lascia vuoto per non cambiare)</label>
+                    <input type="password" id="new_password" name="new_password" minlength="8">
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Salva Modifiche</button>
+                    <a href="{{ url_for('admin.gestione_utenti') }}" class="btn btn-secondary">Annulla</a>
+                </div>
+            </form>
+
+            <hr style="margin: 2rem 0; border-color: var(--grigio-scuro);">
+
+            <div class="admin-actions-section">
+                <h3>Azioni Amministratore</h3>
+
+                {% if not user.is_admin %}
+                <form method="POST" action="{{ url_for('admin.toggle_admin', user_id=user.id) }}"
+                    style="display: inline;">
+                    <button type="submit" class="btn btn-secondary">🛡️ Rendi Admin</button>
+                </form>
+                {% else %}
+                <form method="POST" action="{{ url_for('admin.toggle_admin', user_id=user.id) }}"
+                    style="display: inline;">
+                    <button type="submit" class="btn btn-secondary">👤 Rimuovi Admin</button>
+                </form>
+                {% endif %}
+
+                {% if user.id != current_user.id and not user.is_admin %}
+                <form method="POST" action="{{ url_for('admin.delete_utente', user_id=user.id) }}"
+                    style="display: inline;"
+                    onsubmit="return confirm('ATTENZIONE: Eliminare questo utente? L\'azione è irreversibile!');">
+                    <button type="submit" class="btn btn-danger">🗑️ Elimina Utente</button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .form-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 2rem;
+    }
+
+    .admin-actions-section {
+        margin-top: 1rem;
+    }
+
+    .admin-actions-section h3 {
+        color: var(--giallo-tablhero);
+        margin-bottom: 1rem;
+    }
+
+    .admin-actions-section form {
+        margin-right: 1rem;
+    }
+</style>
+{% endblock %}

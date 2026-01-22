@@ -1,0 +1,180 @@
+<!-- templates/admin/utenti.html -->
+{% extends "base.html" %}
+
+{% block title %}Gestione Utenti{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>👥 Gestione Utenti</h1>
+
+    <div class="admin-toolbar">
+        <form method="GET" class="search-form">
+            <input type="text" name="search" placeholder="Cerca utente..." value="{{ search }}">
+            <select name="ruolo">
+                <option value="">Tutti i Ruoli</option>
+                <option value="sidekick" {% if ruolo_filter=='sidekick' %}selected{% endif %}>Sidekick</option>
+                <option value="tablhero" {% if ruolo_filter=='tablhero' %}selected{% endif %}>TablHero</option>
+                <option value="veteran" {% if ruolo_filter=='veteran' %}selected{% endif %}>Veteran</option>
+                <option value="master" {% if ruolo_filter=='master' %}selected{% endif %}>Master</option>
+                <option value="architect" {% if ruolo_filter=='architect' %}selected{% endif %}>Architect</option>
+                <option value="coordinator" {% if ruolo_filter=='coordinator' %}selected{% endif %}>Coordinator</option>
+            </select>
+            <button type="submit" class="btn btn-secondary">Filtra</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nickname</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th>Ruolo</th>
+                    <th>TablExp</th>
+                    <th>Livello</th>
+                    <th>Status</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for user in utenti.items %}
+                <tr>
+                    <td>{{ user.id }}</td>
+                    <td><strong>{{ user.nickname }}</strong> {% if user.is_admin %}🛡️{% endif %}</td>
+                    <td>{{ user.nome }} {{ user.cognome }}</td>
+                    <td>{{ user.email }}</td>
+                    <td><span class="badge badge-{{ user.ruolo }}">{{ user.ruolo | replace('_', ' ') | title }}</span>
+                    </td>
+                    <td>{{ user.tabl_exp }}</td>
+                    <td><span class="level-badge-small level-{{ user.livello }}">{{ user.livello }}</span></td>
+                    <td>
+                        {% if user.attivo %}
+                        <span class="status-active">✓ Attivo</span>
+                        {% else %}
+                        <span class="status-inactive">✗ Disattivo</span>
+                        {% endif %}
+                    </td>
+                    <td class="action-buttons">
+                        <a href="{{ url_for('admin.edit_utente', user_id=user.id) }}"
+                            class="btn-small btn-secondary">✏️</a>
+                        {% if not user.is_admin or current_user.id != user.id %}
+                        <form method="POST" action="{{ url_for('admin.delete_utente', user_id=user.id) }}"
+                            style="display: inline;"
+                            onsubmit="return confirm('Sicuro di voler eliminare questo utente?');">
+                            <button type="submit" class="btn-small btn-danger">🗑️</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginazione -->
+    {% if utenti.pages > 1 %}
+    <div class="pagination">
+        {% if utenti.has_prev %}
+        <a href="?page={{ utenti.prev_num }}&search={{ search }}&ruolo={{ ruolo_filter }}" class="btn btn-secondary">←
+            Precedente</a>
+        {% endif %}
+        <span class="page-info">Pagina {{ utenti.page }} di {{ utenti.pages }}</span>
+        {% if utenti.has_next %}
+        <a href="?page={{ utenti.next_num }}&search={{ search }}&ruolo={{ ruolo_filter }}"
+            class="btn btn-secondary">Successiva →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .admin-toolbar {
+        margin: 2rem 0;
+    }
+
+    .search-form {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .search-form input[type="text"] {
+        flex: 1;
+        min-width: 200px;
+    }
+
+    .search-form select {
+        min-width: 150px;
+    }
+
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+    }
+
+    .btn-danger {
+        background: #d32f2f;
+        color: white;
+    }
+
+    .btn-danger:hover {
+        background: #b71c1c;
+    }
+
+    .status-active {
+        color: #4caf50;
+        font-weight: 600;
+    }
+
+    .status-inactive {
+        color: #f44336;
+        font-weight: 600;
+    }
+
+    .level-badge-small {
+        padding: 0.2rem 0.6rem;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .level-bronzo {
+        background: #CD7F32;
+    }
+
+    .level-argento {
+        background: #C0C0C0;
+        color: #000;
+    }
+
+    .level-oro {
+        background: #FFD700;
+        color: #000;
+    }
+
+    .level-platino {
+        background: #E5E4E2;
+        color: #000;
+    }
+
+    .level-diamante {
+        background: #B9F2FF;
+        color: #000;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+
+    .page-info {
+        color: var(--grigio-chiaro);
+    }
+</style>
+{% endblock %}

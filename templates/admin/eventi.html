@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Gestione Eventi - Admin{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>🔧 Gestione Eventi</h1>
+    <p>Amministra tutti gli eventi del sistema TablHero</p>
+
+    <div class="admin-actions">
+        <a href="{{ url_for('admin.nuovo_evento') }}" class="btn btn-primary">
+            ➕ Crea Nuovo Evento
+        </a>
+    </div>
+
+    <!-- Filtri -->
+    <div class="eventi-filter">
+        <a href="{{ url_for('admin.gestione_eventi') }}" class="filter-btn {% if not tipo_filter %}active{% endif %}">
+            Tutti
+        </a>
+        <a href="{{ url_for('admin.gestione_eventi', tipo='giochi_tavolo') }}"
+            class="filter-btn {% if tipo_filter == 'giochi_tavolo' %}active{% endif %}">
+            🎲 Giochi da Tavolo
+        </a>
+        <a href="{{ url_for('admin.gestione_eventi', tipo='giochi_ruolo') }}"
+            class="filter-btn {% if tipo_filter == 'giochi_ruolo' %}active{% endif %}">
+            ⚔️ Giochi di Ruolo
+        </a>
+    </div>
+
+    {% if eventi.items %}
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Titolo</th>
+                    <th>Tipo</th>
+                    <th>Data</th>
+                    <th>Partecipanti</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for evento in eventi.items %}
+                <tr>
+                    <td>{{ evento.titolo }}</td>
+                    <td>
+                        <span class="badge">
+                            {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                            {{ evento.tipo.replace('_', ' ').title() }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if evento.data_evento %}
+                        {{ evento.data_evento.strftime('%d/%m/%Y %H:%M') }}
+                        {% else %}
+                        <em>Non impostata</em>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if evento.max_partecipanti %}
+                        {% if evento.data_evento and evento.data_evento < now and evento.override_partecipanti is not
+                            none %} {{ evento.override_partecipanti }}/{{ evento.max_partecipanti }} {% else %} {{
+                            evento.partecipazioni|length }}/{{ evento.max_partecipanti }} {% endif %} {% else %} {% if
+                            evento.data_evento and evento.data_evento < now and evento.override_partecipanti is not none
+                            %} {{ evento.override_partecipanti }} {% else %} {{ evento.partecipazioni|length }} {% endif
+                            %} {% endif %} </td>
+                    <td class="actions">
+                        <a href="{{ url_for('admin.edit_evento', evento_id=evento.id) }}"
+                            class="btn btn-sm btn-secondary">✏️ Modifica</a>
+                        <a href="{{ url_for('admin.partecipanti_evento', evento_id=evento.id) }}"
+                            class="btn btn-sm btn-secondary">👥 Partecipanti</a>
+                        <form method="POST" action="{{ url_for('admin.delete_evento', evento_id=evento.id) }}"
+                            style="display: inline-block; margin: 0; padding: 0; margin-right: 0.25rem; vertical-align: baseline;"
+                            onsubmit="return confirm('Sei sicuro di voler eliminare questo evento?')">
+                            <button type="submit" class="btn btn-sm btn-secondary" style="margin-right: 0;">🗑️
+                                Elimina</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginazione -->
+    {% if eventi.has_prev or eventi.has_next %}
+    <div class="pagination">
+        {% if eventi.has_prev %}
+        <a href="{{ url_for('admin.gestione_eventi', page=eventi.prev_num, tipo=tipo_filter) }}"
+            class="btn btn-secondary">← Precedente</a>
+        {% endif %}
+
+        <span>Pagina {{ eventi.page }} di {{ eventi.pages }}</span>
+
+        {% if eventi.has_next %}
+        <a href="{{ url_for('admin.gestione_eventi', page=eventi.next_num, tipo=tipo_filter) }}"
+            class="btn btn-secondary">Successivo →</a>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="card">
+        <p>Nessun evento trovato.</p>
+        <a href="{{ url_for('admin.nuovo_evento') }}" class="btn btn-primary">
+            Crea il primo evento
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    .admin-actions {
+        margin: 2rem 0;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 2rem 0;
+        background: var(--nero-bg);
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .admin-table th,
+    .admin-table td {
+        padding: 1rem;
+        text-align: left;
+        border-bottom: 1px solid var(--grigio-scuro);
+    }
+
+    .admin-table th {
+        background: var(--rosso-rubino);
+        color: var(--bianco);
+        font-weight: 600;
+    }
+
+    .admin-table tr:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .badge {
+        background: var(--giallo-tablhero);
+        color: var(--nero-bg);
+        padding: 0.25rem 0.5rem;
+        border-radius: 4px;
+        font-size: 0.8rem;
+    }
+
+    .actions {
+        white-space: nowrap;
+    }
+
+    .btn-sm {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.8rem;
+        margin-right: 0.25rem;
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 1rem;
+        margin: 2rem 0;
+    }
+
+    .table-responsive {
+        overflow-x: auto;
+    }
+</style>
+{% endblock %}

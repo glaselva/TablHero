@@ -1,0 +1,219 @@
+<!-- templates/index.html -->
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="hero-section">
+    <div class="container">
+        <h1>Benvenuto in TablHero</h1>
+        <p class="hero-subtitle">L'associazione nerd di Gioia del Colle dedicata ai giochi da tavolo e di ruolo</p>
+
+        <div class="community-stats">
+            <div class="stat-highlight">
+                <div class="stat-number">{{ total_members }}</div>
+                <div class="stat-text">Membri nella Community</div>
+            </div>
+        </div>
+
+        <div class="hero-buttons">
+            {% if not current_user.is_authenticated %}
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-large">Unisciti a Noi</a>
+            <a href="{{ url_for('info') }}" class="btn btn-secondary btn-large">Scopri di Più</a>
+            {% elif current_user.ha_pagato %}
+            <a href="{{ url_for('eventi.lista') }}" class="btn btn-primary btn-large">Esplora Eventi</a>
+            <a href="{{ url_for('dashboard.index') }}" class="btn btn-secondary btn-large">La Tua Dashboard</a>
+            {% else %}
+            <a href="{{ url_for('auth.checkout_renew', ruolo=current_user.ruolo) }}"
+                class="btn btn-primary btn-large">Diventa un Eroe €20/anno</a>
+            <a href="{{ url_for('info') }}" class="btn btn-secondary btn-large">Scopri di Più</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <section class="features-section">
+        <h2>Perché TablHero?</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🎲</div>
+                <h3>Giochi da Tavolo</h3>
+                <p>Scopri e gioca ai migliori board games con altri appassionati</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⚔️</div>
+                <h3>Giochi di Ruolo</h3>
+                <p>Vivi avventure epiche con master esperti e gruppi affiatati</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">⭐</div>
+                <h3>Sistema TablExp</h3>
+                <p>Guadagna esperienza partecipando agli eventi e sali di livello</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">👥</div>
+                <h3>Community</h3>
+                <p>Entra a far parte di una community appassionata e inclusiva</p>
+            </div>
+        </div>
+    </section>
+
+
+
+    {% if current_user.is_authenticated and current_user.ha_pagato %}
+    <section class="upcoming-events-section">
+        <h2>🎲 Prossimi Eventi</h2>
+        {% if prossimi_eventi %}
+        <div class="events-grid">
+            {% for evento in prossimi_eventi %}
+            <div class="event-card">
+                <div class="event-image">
+                    {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                </div>
+                <div class="event-content">
+                    <span class="event-type">{{ evento.tipo | replace('_', ' ') | title }}</span>
+                    <h3>{{ evento.titolo }}</h3>
+                    <p>📅 {{ evento.data_evento.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p>⭐ +{{ evento.exp_reward }} TablExp</p>
+                    <a href="{{ url_for('eventi.dettaglio', evento_id=evento.id) }}" class="btn btn-secondary">
+                        Dettagli
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="text-align: center; margin-top: 2rem;">
+            <a href="{{ url_for('eventi.lista') }}" class="btn btn-primary btn-large">Vedi Tutti gli Eventi</a>
+        </div>
+        {% else %}
+        <p>Nessun evento disponibile al momento.</p>
+        {% endif %}
+    </section>
+    {% else %}
+    <section class="cta-section">
+        <div class="card">
+            <h2>Inizia la Tua Avventura</h2>
+            {% if current_user.ha_pagato %}
+            <p>La tua membership è attiva! Scopri gli eventi.</p>
+            <a href="{{ url_for('eventi.lista') }}" class="btn btn-primary btn-large">Esplora Eventi</a>
+            {% elif current_user.is_authenticated %}
+            <p>La tua membership è scaduta. Rinnova per continuare a partecipare!</p>
+            <a href="{{ url_for('auth.checkout_renew', ruolo=current_user.ruolo) }}" class="btn btn-primary btn-large">
+                Diventa un Eroe €20/anno
+            </a>
+            <p style="font-size: 0.9rem; color: var(--grigio-chiaro); margin-top: 1rem;">
+                💎 Sconti esclusivi eventi + TablExp bonus
+            </p>
+            {% else %}
+            <p>Scegli il ruolo che fa per te e unisciti alla community TablHero oggi stesso!</p>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-primary btn-large">Registrati Ora</a>
+            {% endif %}
+        </div>
+    </section>
+    {% endif %}
+</div>
+
+<style>
+    .hero-section {
+        background: linear-gradient(135deg, var(--nero-bg) 0%, var(--grigio-scuro) 100%);
+        padding: 4rem 0;
+        text-align: center;
+        border-bottom: 3px solid var(--rosso-rubino);
+    }
+
+    .hero-section h1 {
+        font-size: 3rem;
+        color: var(--giallo-tablhero);
+        margin-bottom: 1rem;
+    }
+
+    .hero-subtitle {
+        font-size: 1.3rem;
+        margin-bottom: 2rem;
+        color: var(--grigio-chiaro);
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn-large {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+
+    .features-section {
+        margin: 4rem 0;
+    }
+
+    .features-section h2 {
+        text-align: center;
+        font-size: 2.5rem;
+        color: var(--giallo-tablhero);
+        margin-bottom: 3rem;
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+
+    .feature-card {
+        background: var(--grigio-scuro);
+        padding: 2rem;
+        border-radius: 10px;
+        border: 2px solid var(--rosso-rubino);
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .feature-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .feature-icon {
+        font-size: 4rem;
+        margin-bottom: 1rem;
+    }
+
+    .feature-card h3 {
+        color: var(--giallo-tablhero);
+        margin-bottom: 1rem;
+    }
+
+    .cta-section {
+        margin: 4rem 0;
+        text-align: center;
+    }
+
+    .cta-section h2 {
+        color: var(--giallo-tablhero);
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+
+    footer {
+        background: var(--grigio-scuro);
+        padding: 2rem 0;
+        margin-top: 4rem;
+        border-top: 3px solid var(--rosso-rubino);
+        text-align: center;
+    }
+
+    .social-links {
+        margin-top: 1rem;
+    }
+
+    .social-links a {
+        margin: 0 1rem;
+        color: var(--giallo-tablhero);
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}

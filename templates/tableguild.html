@@ -1,0 +1,135 @@
+<!-- templates/tableguild.html -->
+{% extends "base.html" %}
+
+{% block title %}TableGuild - TableHero{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="hero-section"
+        style="background: linear-gradient(135deg, var(--nero-bg), var(--grigio-scuro)); padding: 4rem 0; text-align: center; border-bottom: 3px solid var(--rosso-rubino);">
+        <h1 style="font-size: 3.5rem; color: var(--giallo-tablhero);">Table<span
+                style="color: var(--rosso-rubino);">Guild</span></h1>
+        <p style="font-size: 1.4rem; color: var(--grigio-chiaro); max-width: 800px; margin: 0 auto;">
+            La nostra élite di collaboratori che rende TableHero speciale
+        </p>
+    </div>
+
+    <section class="guild-section" style="padding: 4rem 0;">
+        <div class="container">
+            <div class="guild-intro">
+                <h2 style="text-align: center; color: var(--giallo-tablhero); margin-bottom: 3rem;">Unisciti alla Guild
+                </h2>
+                <p
+                    style="font-size: 1.2rem; color: var(--grigio-chiaro); text-align: center; max-width: 900px; margin: 0 auto 3rem;">
+                    TableGuild è riservata ai migliori collaboratori di TableHero. Solo su <strong>invito o richiesta
+                        approvata</strong>.
+                </p>
+            </div>
+
+            <div class="guild-roles"
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 3rem; margin-bottom: 4rem;">
+                <!-- MASTER -->
+                <div class="guild-role-card"
+                    style="background: var(--grigio-scuro); padding: 2.5rem; border-radius: 15px; border: 3px solid var(--rosso-rubino); text-align: center;">
+                    <div class="role-icon" style="font-size: 5rem; margin-bottom: 1rem;">🎲</div>
+                    <h3 style="color: var(--giallo-tablhero); margin-bottom: 1rem;">Master</h3>
+                    <p style="color: var(--grigio-chiaro); line-height: 1.6;">
+                        Organizzano e gestiscono le giocate da tavolo e GDR. Hanno privilegi esclusivi:
+                    </p>
+                    <ul style="text-align: left; color: var(--grigio-chiaro); margin: 1.5rem 0;">
+                        <li>Creano eventi con <strong>priority alta</strong></li>
+                        <li><strong>Gratuiti</strong> a tutti gli eventi</li>
+                        <li>Badge distintivo Guild visibile</li>
+                        <li>Accesso canale Discord privato</li>
+                    </ul>
+                </div>
+
+                <!-- ARCHITECT -->
+                <div class="guild-role-card"
+                    style="background: var(--grigio-scuro); padding: 2.5rem; border-radius: 15px; border: 3px solid var(--giallo-tablhero); text-align: center;">
+                    <div class="role-icon" style="font-size: 5rem; margin-bottom: 1rem;">🎨</div>
+                    <h3 style="color: var(--giallo-tablhero); margin-bottom: 1rem;">Architect</h3>
+                    <p style="color: var(--grigio-chiaro); line-height: 1.6;">
+                        Artisti e creativi che supportano TableHero con illustrazioni, grafiche e contenuti:
+                    </p>
+                    <ul style="text-align: left; color: var(--grigio-chiaro); margin: 1.5rem 0;">
+                        <li>Crediti ufficiali nei nostri materiali</li>
+                        <li>Commissioni grafiche prioritarie</li>
+                        <li><strong>Gratuiti</strong> eventi + materiali</li>
+                        <li>Portfolio showcase sul sito</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="apply-section"
+                style="background: var(--giallo-tablhero); padding: 3rem; border-radius: 20px; text-align: center; border: 2px solid var(--rosso-rubino); color: var(--nero-bg);">
+                <h2 style="color: var(--nero-bg); margin-bottom: 1.5rem;">Come Candidarti</h2>
+                <p
+                    style="color: var(--nero-bg); font-size: 1.2rem; margin-bottom: 2rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+                    La TableGuild è <strong>su invito</strong> o <strong>su richiesta approvata</strong> dal Direttivo.
+                </p>
+                <div style="display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
+                    <a href="mailto:info@tablehero.it?subject=Candidatura%20TableGuild&body=Mi%20candido%20come...%0ANome:%0AEsperienza:%0AContributo:%0A"
+                        class="btn btn-primary"
+                        style="background: var(--rosso-rubino); padding: 1.2rem 2.5rem; font-size: 1.1rem;">
+                        📧 Candidati via Email
+                    </a>
+                    <a href="https://wa.me/393xxxxxxxxx?text=Ciao!%20Mi%20interessa%20TableGuild..."
+                        class="btn btn-primary" style="padding: 1.2rem 2.5rem; font-size: 1.1rem;">
+                        💬 Contattaci WhatsApp
+                    </a>
+                </div>
+                <p style="color: var(--nero-bg); margin-top: 2rem; font-size: 0.95rem;">
+                    Rispondiamo entro 48h. Preparati a mostrarci il tuo portfolio/esperienza! 🎯
+                </p>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .guild-role-card {
+        background: #1e1e1e !important;
+        /* ✅ Grigio scuro FORZATO */
+        padding: 2.5rem;
+        border-radius: 15px;
+        border: 3px solid;
+        text-align: center;
+        color: #f0f0f0 !important;
+        /* ✅ Testo bianco */
+    }
+
+    .guild-role-card:nth-child(1) {
+        border-color: var(--rosso-rubino);
+    }
+
+    .guild-role-card:nth-child(2) {
+        border-color: var(--giallo-tablhero);
+    }
+
+    .role-icon {
+        font-size: 5rem;
+        margin-bottom: 1rem;
+        color: #ffd700 !important;
+        /* ✅ Giallo FORZATO */
+        -webkit-text-fill-color: #ffd700 !important;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        background: none !important;
+    }
+
+    .guild-role-card h3 {
+        color: var(--giallo-tablhero) !important;
+        font-size: 1.8rem;
+    }
+
+    .guild-role-card ul {
+        color: #d0d0d0 !important;
+        text-align: left;
+    }
+
+    .guild-role-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+    }
+</style>
+{% endblock %}

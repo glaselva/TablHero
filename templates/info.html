@@ -1,0 +1,288 @@
+<!-- templates/info.html -->
+{% extends "base.html" %}
+
+{% block title %}Info & Ruoli{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="page-title">ℹ️ Informazioni e Ruoli</h1>
+
+    <section class="card">
+        <h2>Chi Siamo</h2>
+        <p>
+            <strong>TablHero</strong> è un'associazione nerd nata a <strong>Gioia del Colle</strong>
+            dall'idea di tre appassionati founder: <strong>Domenico Longo</strong>,
+            <strong>Alessandro Palmisano</strong> e <strong>Giuseppe La Selva</strong>.
+        </p>
+        <p>
+            La nostra missione è riunire persone appassionate di giochi da tavolo, giochi di ruolo
+            e cultura nerd, creando una community inclusiva e divertente dove condividere la passione
+            per il gioco.
+        </p>
+    </section>
+
+    <section>
+        <h2>Sistema TablExp</h2>
+        <div class="card">
+            <p>
+                Il sistema <strong style="color: var(--giallo-tablhero);">TablExp</strong> è il cuore
+                della progressione in TablHero. Ogni volta che partecipi a un evento, guadagni esperienza
+                e sali di livello!
+            </p>
+
+            <h3>Livelli Disponibili</h3>
+            <div class="levels-grid">
+                <div class="level-card level-bronzo">
+                    <div class="level-icon">🥉</div>
+                    <h4>Bronzo</h4>
+                    <p>1 - 500 TablExp</p>
+                    <span class="level-description">Il tuo inizio come eroe!</span>
+                </div>
+                <div class="level-card level-argento">
+                    <div class="level-icon">🥈</div>
+                    <h4>Argento</h4>
+                    <p>501 - 1,500 TablExp</p>
+                    <span class="level-description">Stai progredendo bene!</span>
+                </div>
+                <div class="level-card level-oro">
+                    <div class="level-icon">🥇</div>
+                    <h4>Oro</h4>
+                    <p>1,501 - 3,500 TablExp</p>
+                    <span class="level-description">Un veterano rispettato!</span>
+                </div>
+                <div class="level-card level-platino">
+                    <div class="level-icon">💎</div>
+                    <h4>Platino</h4>
+                    <p>3,501 - 7,500 TablExp</p>
+                    <span class="level-description">Un vero campione!</span>
+                </div>
+                <div class="level-card level-diamante">
+                    <div class="level-icon">💠</div>
+                    <h4>Diamante</h4>
+                    <p>7,501+ TablExp</p>
+                    <span class="level-description">Leggenda vivente!</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <h2>Ruoli e Abbonamenti</h2>
+
+        <div class="roles-grid">
+            <div class="role-card">
+                <div class="role-header role-sidekick">
+                    <h3>👤 Sidekick</h3>
+                    <div class="price">GRATIS</div>
+                </div>
+                <div class="role-body">
+                    <p class="role-description">Il ruolo perfetto per iniziare la tua avventura!</p>
+                    <ul class="role-features">
+                        <li>✓ Accesso base agli eventi</li>
+                        <li>✓ Sistema TablExp</li>
+                        <li>✓ Profilo personale</li>
+                        <li>✓ Community Discord</li>
+                    </ul>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.register') }}" class="btn btn-secondary btn-full">Registrati Gratis</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="role-card featured">
+                <div class="featured-badge">⭐ POPOLARE</div>
+                <div class="role-header role-tablhero">
+                    <h3>⭐ TablHero</h3>
+                    <div class="price">20€</div>
+                </div>
+                <div class="role-body">
+                    <p class="role-description">L'abbonamento completo per veri appassionati!</p>
+                    <ul class="role-features">
+                        <li>✓ Tutti i vantaggi Sidekick</li>
+                        <li>✓ Accesso prioritario agli eventi</li>
+                        <li>✓ Sconti su merchandise</li>
+                        <li>✓ Eventi esclusivi</li>
+                        <li>✓ Badge speciale</li>
+                    </ul>
+                    {% if not current_user.is_authenticated %}
+                    <a href="{{ url_for('auth.checkout_renew', ruolo='tablhero') }}"
+                        class="btn btn-primary btn-full">Diventa un Eroe</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="role-card">
+                <div class="role-header role-architect">
+                    <h3>🏰 TableGuild</h3>
+                    <div class="price">SU CANDIDATURA</div>
+                </div>
+                <div class="role-body">
+                    <p class="role-description">Un'esclusiva cerchia di maestri e collaboratori selezionati!</p>
+                    <ul class="role-features">
+                        <li>✓ Tutti i vantaggi TablHero</li>
+                        <li>✓ Sconti aggiuntivi esclusivi</li>
+                        <li>✓ Possibilità di diventare Master di giochi</li>
+                        <li>✓ Collaborazioni speciali con TablHero</li>
+                        <li>✓ Accesso a eventi privati e workshop</li>
+                        <li>✓ Badge TableGuild esclusivo</li>
+                        <li>✓ Supporto per lo sviluppo di nuovi giochi</li>
+                    </ul>
+                    {% if not current_user.is_authenticated %}
+                    <a href="mailto:info@tablehero.it?subject=Candidatura TableGuild"
+                        class="btn btn-primary btn-full">Candidati per TableGuild</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<style>
+    .page-title {
+        text-align: center;
+        color: var(--giallo-tablhero);
+        font-size: 2.5rem;
+        margin-bottom: 2rem;
+    }
+
+    .levels-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 1.5rem;
+        margin: 2rem 0;
+    }
+
+    .level-card {
+        padding: 1.5rem;
+        border-radius: 10px;
+        text-align: center;
+        border: 3px solid;
+    }
+
+    .level-card.level-bronzo {
+        border-color: #CD7F32;
+        background: rgba(205, 127, 50, 0.1);
+    }
+
+    .level-card.level-argento {
+        border-color: #C0C0C0;
+        background: rgba(192, 192, 192, 0.1);
+    }
+
+    .level-card.level-oro {
+        border-color: #FFD700;
+        background: rgba(255, 215, 0, 0.1);
+    }
+
+    .level-card.level-platino {
+        border-color: #E5E4E2;
+        background: rgba(229, 228, 226, 0.1);
+    }
+
+    .level-card.level-diamante {
+        border-color: #B9F2FF;
+        background: rgba(185, 242, 255, 0.1);
+    }
+
+    .level-icon {
+        font-size: 3rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .level-card h4 {
+        color: var(--giallo-tablhero);
+        margin-bottom: 0.5rem;
+    }
+
+    .level-description {
+        font-size: 0.85rem;
+        color: var(--grigio-chiaro);
+        font-style: italic;
+    }
+
+    .roles-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        margin: 2rem 0;
+    }
+
+    .role-card {
+        background: var(--grigio-scuro);
+        border-radius: 12px;
+        border: 2px solid var(--rosso-rubino);
+        overflow: hidden;
+        position: relative;
+        transition: transform 0.3s;
+    }
+
+    .role-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .role-card.featured {
+        border-color: var(--giallo-tablhero);
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .featured-badge {
+        position: absolute;
+        top: 10px;
+        right: -30px;
+        background: var(--giallo-tablhero);
+        color: var(--nero-bg);
+        padding: 0.3rem 2.5rem;
+        transform: rotate(45deg);
+        font-weight: bold;
+        font-size: 0.75rem;
+    }
+
+    .role-header {
+        padding: 2rem;
+        text-align: center;
+        color: white;
+    }
+
+    .role-header.role-sidekick {
+        background: #666;
+    }
+
+    .role-header.role-tablhero {
+        background: var(--rosso-rubino);
+    }
+
+    .role-header.role-architect {
+        background: var(--giallo-tablhero);
+        color: var(--nero-bg);
+    }
+
+    .role-header h3 {
+        margin-bottom: 0.5rem;
+        font-size: 1.5rem;
+    }
+
+    .price {
+        font-size: 2rem;
+        font-weight: bold;
+    }
+
+    .role-body {
+        padding: 2rem;
+    }
+
+    .role-description {
+        color: var(--grigio-chiaro);
+        margin-bottom: 1.5rem;
+    }
+
+    .role-features {
+        list-style: none;
+        margin-bottom: 1.5rem;
+    }
+
+    .role-features li {
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--grigio-scuro);
+    }
+</style>
+{% endblock %}

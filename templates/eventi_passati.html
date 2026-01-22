@@ -1,0 +1,99 @@
+<!-- templates/eventi_passati.html -->
+{% extends "base.html" %}
+
+{% block title %}📜 Eventi Passati{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>📜 Storico Eventi</h1>
+    <p class="subtitle">Rivivi i momenti epici della community TablHero!</p>
+
+    <!-- Filtri -->
+    <div class="eventi-filter">
+        <a href="{{ url_for('eventi.eventi_passati') }}" class="filter-btn {% if not tipo_filtro %}active{% endif %}">
+            Tutti
+        </a>
+        <a href="{{ url_for('eventi.eventi_passati', tipo='giochi_tavolo') }}"
+            class="filter-btn {% if tipo_filtro == 'giochi_tavolo' %}active{% endif %}">
+            🎲 Giochi da Tavolo
+        </a>
+        <a href="{{ url_for('eventi.eventi_passati', tipo='giochi_ruolo') }}"
+            class="filter-btn {% if tipo_filtro == 'giochi_ruolo' %}active{% endif %}">
+            ⚔️ Giochi di Ruolo
+        </a>
+    </div>
+
+    {% if eventi %}
+    <div class="events-grid">
+        {% for evento in eventi %}
+        <div class="event-card event-past">
+            <div class="event-image">
+                {% if evento.immagine_url %}
+                <img src="{{ evento.immagine_url }}" alt="{{ evento.titolo }}">
+                {% else %}
+                <div class="event-icon-placeholder">
+                    {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                </div>
+                {% endif %}
+            </div>
+
+            <div class="event-content">
+                <span class="event-type">{{ evento.tipo.replace('_', ' ').title() }}</span>
+                <h3>{{ evento.titolo }}</h3>
+                <p>📅 {{ evento.data_evento.strftime('%d/%m/%Y alle %H:%M') if evento.data_evento else 'Data non
+                    impostata' }}</p>
+                {% if evento.override_partecipanti is not none %}
+                <p>👥 {{ evento.override_partecipanti }} partecipanti</p>
+                {% else %}
+                <p>👥 {{ evento.partecipazioni|length }} partecipanti</p>
+                {% endif %}
+                <p>⭐ {{ evento.exp_reward }} TablExp</p>
+
+                <a href="{{ url_for('eventi.dettaglio', evento_id=evento.id) }}" class="btn btn-secondary">
+                    Dettagli
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="card">
+        <p>Nessun evento passato disponibile. Torna presto!</p>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+    /* Stili specifici per eventi passati */
+
+    .event-past:hover {
+        opacity: 1;
+        border-color: rgba(255, 215, 0, 0.5);
+    }
+
+    .event-past-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: rgba(230, 57, 70, 0.95);
+        color: #FFD700;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        z-index: 2;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .event-icon-placeholder {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 4rem;
+        background: linear-gradient(135deg, rgba(31, 20, 16, 0.9), rgba(54, 46, 45, 0.8));
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}Modifica Evento{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Modifica Evento</h1>
+
+    <div class="card">
+        <form method="POST">
+            <div class="form-group">
+                <label for="titolo">Titolo *</label>
+                <input type="text" id="titolo" name="titolo" value="{{ evento.titolo }}" required>
+            </div>
+
+            <div class="form-group">
+                <label for="descrizione">Descrizione</label>
+                <textarea id="descrizione" name="descrizione" rows="5">{{ evento.descrizione }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="tipo">Tipo Evento *</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="giochi_tavolo" {% if evento.tipo=='giochi_tavolo' %}selected{% endif %}>
+                        Giochi da Tavolo
+                    </option>
+                    <option value="giochi_ruolo" {% if evento.tipo=='giochi_ruolo' %}selected{% endif %}>
+                        Giochi di Ruolo
+                    </option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="data_evento">Data e Ora *</label>
+                <input type="datetime-local" id="data_evento" name="data_evento"
+                    value="{{ evento.data_evento.strftime('%Y-%m-%dT%H:%M') if evento.data_evento else '' }}" step="900"
+                    required>
+            </div>
+
+            <div class="form-group">
+                <label for="max_partecipanti">Massimo Partecipanti</label>
+                <input type="number" id="max_partecipanti" name="max_partecipanti"
+                    value="{{ evento.max_partecipanti or '' }}" min="1">
+                <small>Lascia vuoto per illimitati</small>
+            </div>
+
+            {% if evento.data_evento and evento.data_evento < now %} <div class="form-group">
+                <label for="override_partecipanti">Override Conteggio Partecipanti (solo eventi passati)</label>
+                <input type="number" id="override_partecipanti" name="override_partecipanti"
+                    value="{{ evento.override_partecipanti or '' }}" min="0">
+                <small>Imposta manualmente il numero di partecipanti per eventi passati</small>
+    </div>
+    {% endif %}
+
+    <div class="form-group">
+        <label for="exp_reward">TablExp Ricompensa</label>
+        <input type="number" id="exp_reward" name="exp_reward" value="{{ evento.exp_reward }}" min="0" required>
+    </div>
+
+    <div class="form-group">
+        <label for="immagine_url">URL Immagine</label>
+        <input type="url" id="immagine_url" name="immagine_url" value="{{ evento.immagine_url or '' }}"
+            placeholder="https://esempio.com/immagine.jpg">
+        <small>Usa immagini con rapporto 16:9 per risultati migliori</small>
+    </div>
+
+    <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+        <button type="submit" class="btn btn-primary">Salva Modifiche</button>
+        <a href="{{ url_for('admin.gestione_eventi') }}" class="btn btn-secondary">Annulla</a>
+    </div>
+    </form>
+</div>
+
+<!-- Gestione Partecipanti -->
+<div class="card">
+    <h3>Partecipanti Attuali ({{ evento.partecipazioni | length }})</h3>
+
+    {% if evento.partecipazioni %}
+    <div style="margin-bottom: 1rem;">
+        <form method="POST" action="{{ url_for('admin.rimuovi_tutti_partecipanti', evento_id=evento.id) }}"
+            onsubmit="return confirm('Sei sicuro di voler rimuovere TUTTI i partecipanti da questo evento? Questa azione non può essere annullata.');">
+            <button type="submit" class="btn btn-danger">Rimuovi Tutti i Partecipanti</button>
+        </form>
+    </div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Nickname</th>
+                    <th>Email</th>
+                    <th>Ruolo</th>
+                    <th>Data Iscrizione</th>
+                    <th>Azioni</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for partecipazione in evento.partecipazioni %}
+                <tr>
+                    <td><strong>{{ partecipazione.user.nickname }}</strong></td>
+                    <td>{{ partecipazione.user.email }}</td>
+                    <td><span class="badge badge-{{ partecipazione.user.ruolo }}">{{ partecipazione.user.ruolo |
+                            replace('_', ' ') | title }}</span></td>
+                    <td>{{ partecipazione.data_partecipazione.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td>
+                        <form method="POST"
+                            action="{{ url_for('admin.rimuovi_partecipante', evento_id=evento.id, user_id=partecipazione.user.id) }}"
+                            style="display: inline;"
+                            onsubmit="return confirm('Sei sicuro di voler rimuovere {{ partecipazione.user.nickname }} da questo evento? Perderà {{ partecipazione.exp_guadagnata }} TablExp.');">
+                            <button type="submit" class="btn btn-sm btn-danger">Rimuovi</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Nessun partecipante iscritto a questo evento.</p>
+    {% endif %}
+</div>
+</div>
+{% endblock %}

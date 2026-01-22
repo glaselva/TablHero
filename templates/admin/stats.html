@@ -1,0 +1,91 @@
+<!-- templates/admin/stats.html -->
+{% extends "admin/base_admin.html" %}
+
+{% block title %}Stats - Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">📊 Statistiche TablHero</h1>
+
+    <!-- Card principali -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card bg-primary">
+                <h3>{{ total_users }}</h3>
+                <p>Membri Totali</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-success">
+                <h3>{{ eventi_prossimi }}</h3>
+                <p>Eventi Prossimi</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-warning">
+                <h3>{{ partecipazioni_totali }}</h3>
+                <p>Partecipazioni</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card bg-info">
+                <h3>{{ nuovi_utenti_30gg }}</h3>
+                <p>Nuovi 30gg</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ruoli -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <h5>🎯 Distribuzione Ruoli</h5>
+            <div class="row">
+                {% for ruolo, count in ruolo_counts.items() %}
+                <div class="col-md-2">
+                    <div class="ruolo-card">{{ ruolo.title() }}: {{ count }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h5>🏆 Top 5 Leaderboard</h5>
+            <ol>
+                {% for user in top_users %}
+                <li>{{ user.nome }} {{ user.cognome }} - {{ user.tabl_exp }} EXP</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
+
+<style>
+    .stat-card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        text-align: center;
+        color: white;
+        margin-bottom: 20px;
+    }
+
+    .bg-primary {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    }
+
+    .bg-success {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%) !important;
+    }
+
+    .ruolo-card {
+        background: #f8f9fa;
+        padding: 15px;
+        border-radius: 8px;
+        text-align: center;
+        margin: 5px 0;
+    }
+</style>
+{% endblock %}

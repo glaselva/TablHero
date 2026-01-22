@@ -1,0 +1,257 @@
+<!-- templates/dashboard.html -->
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="dashboard-header">
+        <h1>Benvenuto, {{ current_user.nickname }}!</h1>
+        <span class="level-badge" style="background-color: {{ current_user.livello | livello_color }}">
+            {{ current_user.livello | upper }}
+        </span>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-value">{{ current_user.tabl_exp }}</div>
+            <div class="stat-label">TablExp Totale</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ total_eventi }}</div>
+            <div class="stat-label">Eventi Partecipati</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-value">{{ current_user.ruolo | replace('_', ' ') | title }}</div>
+            <div class="stat-label">Ruolo</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Membership</div>
+            <div class="stat-value"
+                style="color: {% if current_user.ruolo == 'founder' %}var(--giallo-tablhero){% elif current_user.ha_pagato %}var(--verde-successo){% else %}var(--rosso-rubino){% endif %}">
+                {% if current_user.ruolo == 'founder' %}
+                A vita
+                {% elif current_user.ha_pagato %}
+                {% if current_user.data_scadenza %}
+                Attiva fino {{ current_user.data_scadenza.strftime('%d/%m/%Y') }}
+                {% else %}
+                Attiva (senza scadenza)
+                {% endif %}
+                {% else %}
+                Nessuna
+                {% endif %}
+            </div>
+            {% if current_user.ruolo != 'founder' and not current_user.is_admin %}
+            {% if not current_user.ha_pagato %}
+            <div style="text-align: center; margin: 1rem 0;">
+                <form method="POST" action="{{ url_for('dashboard.renew_membership') }}">
+                    <button type="submit" class="btn" style="background: var(--giallo-tablhero); color: white;">
+                        Attiva Membership €20/anno
+                    </button>
+                </form>
+            </div>
+            {% elif current_user.data_scadenza %}
+            {% set giorni_restanti = ((current_user.data_scadenza - now).days) %}
+            {% if giorni_restanti <= 30 %} <div style="text-align: center; margin: 1rem 0;">
+                <form method="POST" action="{{ url_for('dashboard.renew_membership') }}">
+                    <button type="submit" class="btn" style="background: var(--giallo-tablhero); color: white;">
+                        Rinnova Membership (+365gg)
+                    </button>
+                </form>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% endif %}
+    </div>
+    <div class="stat-card">
+        <div class="stat-value">{{ exp_per_prossimo }}</div>
+        <div class="stat-label">Exp al Prossimo Livello</div>
+    </div>
+</div>
+
+{% if current_user.ruolo != 'founder' and not current_user.is_admin and current_user.ha_pagato %}
+{% set giorni_restanti = ((current_user.data_scadenza - now).days) %}
+{% if giorni_restanti <= 30 %} <div style="text-align: center; margin: 1rem 0;">
+    <form method="POST" action="{{ url_for('dashboard.renew_membership') }}">
+        <button type="submit" class="btn" style="background: var(--giallo-tablhero);">Rinnova (+365gg)</button>
+    </form>
+    <small>{{ giorni_restanti }}gg rimanenti</small>
+    </div>
+    {% endif %}
+    {% endif %}
+
+    {% if current_user.ruolo != 'founder' and not current_user.is_admin %}
+    <div style="text-align: center; margin: 1rem 0; display: flex; gap: 1rem; justify-content: center;">
+        {% if current_user.ha_pagato %}
+        <form method="POST" action="{{ url_for('dashboard.disiscriviti') }}"
+            onsubmit="return confirm('Sicuro di disiscriverti? Perderai iscrizioni eventi.');">
+            <button type="submit" class="btn"
+                style="background: var(--rosso-rubino); color: white;">Disiscriviti</button>
+        </form>
+        {% else %}
+        <form method="POST" action="{{ url_for('dashboard.cancella_account') }}"
+            onsubmit="return confirm('ATTENZIONE: Questa azione è irreversibile. Il tuo account e tutti i dati associati verranno eliminati definitivamente. Sei sicuro di voler procedere?');">
+            <button type="submit" class="btn" style="background: var(--red); color: white;">Cancella
+                l'account</button>
+        </form>
+        {% endif %}
+    </div>
+    {% endif %}
+
+    <div class="card">
+        <h3>Progressione Livello</h3>
+        <div class="progress-bar">
+            <div class="progress-fill" style="width: {{ progresso }}%">
+                {{ "%.1f"|format(progresso) }}%
+            </div>
+        </div>
+        <p class="progress-info">
+            Livello attuale: <strong>{{ current_user.livello | upper }}</strong>
+            ({{ current_user.tabl_exp }} TablExp)
+        </p>
+    </div>
+
+    <section>
+        <h2>Prossimi Eventi</h2>
+        {% if prossimi_eventi %}
+        <div class="events-grid">
+            {% for evento in prossimi_eventi %}
+            <div class="event-card">
+                <div class="event-image">
+                    {% if evento.tipo == 'giochi_tavolo' %}🎲{% else %}⚔️{% endif %}
+                </div>
+                <div class="event-content">
+                    <span class="event-type">{{ evento.tipo | replace('_', ' ') | title }}</span>
+                    <h3>{{ evento.titolo }}</h3>
+                    <p>📅 {{ evento.data_evento.strftime('%d/%m/%Y %H:%M') }}</p>
+                    <p>⭐ +{{ evento.exp_reward }} TablExp</p>
+                    <a href="{{ url_for('eventi.dettaglio', evento_id=evento.id) }}" class="btn btn-secondary">
+                        Dettagli
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p>Nessun evento disponibile al momento.</p>
+        {% endif %}
+    </section>
+
+    <section>
+        <h2>Ultimi Eventi Partecipati</h2>
+        {% if partecipazioni_recenti %}
+        <div class="partecipazioni-list">
+            {% for partecipazione in partecipazioni_recenti %}
+            <div class="partecipazione-item">
+                <div>
+                    <strong>{{ partecipazione.evento.titolo }}</strong>
+                    <span class="event-type-small">{{ partecipazione.evento.tipo | replace('_', ' ') }}</span>
+                </div>
+                <div>
+                    <span class="exp-gained">+{{ partecipazione.exp_guadagnata }} Exp</span>
+                    <span class="date-small">{{ partecipazione.data_partecipazione.strftime('%d/%m/%Y') }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('dashboard.miei_eventi') }}" class="btn btn-secondary">Vedi Tutti</a>
+        {% else %}
+        <p>Non hai ancora partecipato a nessun evento.</p>
+        {% endif %}
+    </section>
+    </div>
+
+    <style>
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-header h1 {
+            color: var(--giallo-tablhero);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            padding: 1rem;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            text-align: center;
+            transition: all 0.5s ease;
+            overflow: hidden;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 215, 0, 0.2);
+        }
+
+        .stat-value {
+            font-family: 'Orbitron', monospace;
+            font-size: 1.8rem;
+            font-weight: 600;
+            background: linear-gradient(45deg, var(--gold), var(--warm-orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+            margin-bottom: 0.3rem;
+            word-break: break-word;
+        }
+
+        .stat-label {
+            color: rgba(232, 212, 186, 0.8);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-weight: 400;
+        }
+
+        .progress-info {
+            margin-top: 1rem;
+            color: var(--grigio-chiaro);
+        }
+
+        .partecipazioni-list {
+            margin-bottom: 1rem;
+        }
+
+        .partecipazione-item {
+            background: var(--grigio-scuro);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 6px;
+            border-left: 4px solid var(--rosso-rubino);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .event-type-small {
+            font-size: 0.8rem;
+            color: var(--grigio-chiaro);
+            margin-left: 0.5rem;
+        }
+
+        .exp-gained {
+            color: var(--giallo-tablhero);
+            font-weight: bold;
+            margin-right: 1rem;
+        }
+
+        .date-small {
+            color: var(--grigio-chiaro);
+            font-size: 0.9rem;
+        }
+    </style>
+    {% endblock %}
