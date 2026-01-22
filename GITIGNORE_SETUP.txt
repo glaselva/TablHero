@@ -1,0 +1,340 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║           ✅ .GITIGNORE CREATO - Configurazione Git per TablHero             ║
+║                                                                              ║
+║            Proteggi i file sensibili e mantieni il repo pulito!             ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 COSA È STATO CREATO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ .gitignore
+   • Configurazione Git per il progetto
+   • Esclude file sensibili e temporanei
+   • Organizzato in sezioni
+
+✅ .env.example
+   • Template per le variabili d'ambiente
+   • Documenta tutti i settings necessari
+   • Può essere committato (contiene solo esempi)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔐 COSA VIENE ESCLUSO DAL GIT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PYTHON:
+  ✓ venv/                  → Virtual environment (ricreabile)
+  ✓ __pycache__/          → Cache Python (generato automaticamente)
+  ✓ *.pyc, *.pyo          → File compilati Python
+  ✓ *.egg-info/           → Metadati pacchetti
+  ✓ dist/, build/         → Artefatti build
+
+FLASK:
+  ✓ instance/             → Cartella istanza Flask
+  ✓ .webassets-cache      → Cache assets
+
+DATABASE:
+  ✓ *.db                  → Database SQLite
+  ✓ *.sqlite, *.sqlite3   → Database SQLite
+  ✓ tablhero.db          → Database TablHero specifico
+
+ENVIRONMENT (IMPORTANTE!):
+  ✓ .env                  → Variabili d'ambiente (SECRETS!)
+  ✓ .flaskenv             → Flask configuration
+  ✓ credenziali sito.txt  → File credenziali (SENSIBILE!)
+
+IDE:
+  ✓ .vscode/              → Visual Studio Code settings
+  ✓ .idea/                → JetBrains IDEs (PyCharm, ecc)
+  ✓ *.swp, *.swo          → Vim temporary files
+  ✓ *~                    → Editor temporary files
+
+OS:
+  ✓ .DS_Store             → macOS system file
+  ✓ Thumbs.db             → Windows system file
+  ✓ Desktop.ini           → Windows system file
+
+TESTING:
+  ✓ .pytest_cache/        → Pytest cache
+  ✓ .coverage             → Coverage reports
+  ✓ htmlcov/              → HTML coverage reports
+
+LOG FILES:
+  ✓ *.log                 → File di log
+  ✓ logs/                 → Cartella log
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📁 STRUTTURA .GITIGNORE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Il .gitignore è organizzato in sezioni logiche:
+
+1. PYTHON
+   └─ Virtual environment, cache, pacchetti
+
+2. FLASK
+   └─ Istanza Flask, assets cache
+
+3. DATABASE
+   └─ SQLite e database files
+
+4. IDE / TEXT EDITORS
+   └─ VSCode, PyCharm, Vim, ecc.
+
+5. OPERATING SYSTEM
+   └─ macOS, Windows, Linux
+
+6. PROJECT SPECIFIC
+   └─ Specifico per TablHero
+
+7. DOCKER
+   └─ File Docker (se usi Docker)
+
+8. ALLOWED EXCEPTIONS
+   └─ File da includere anche se normalmente esclusi
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚠️  FILE SENSIBILI - NON COMMITTARE MAI!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+.env
+  ├─ STRIPE_SECRET_KEY = Chiave segreta Stripe (accesso account!)
+  ├─ MAIL_PASSWORD = Password email (accesso account!)
+  ├─ SECRET_KEY = Chiave Flask (sign sessions!)
+  └─ DATABASE_URL = Credenziali database (accesso dati!)
+
+credenziali sito.txt
+  └─ Credenziali account (SEMPRE sensibile!)
+
+.vscode/settings.json
+  └─ Potrebbe contenere paths o settings privati
+
+Questi file vengono automaticamente esclusi dal .gitignore ✅
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📝 .ENV.EXAMPLE - COME USARLO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PER NUOVI DEVELOPER:
+
+  1. Clone il progetto:
+     $ git clone https://github.com/.../TablHero.git
+  
+  2. Copia il template:
+     $ cp .env.example .env
+  
+  3. Modifica i valori:
+     $ nano .env
+  
+  4. Aggiungi le tue credenziali reali:
+     FLASK_ENV=development
+     SECRET_KEY=<genera nuovo con: python -c "import secrets; print(secrets.token_hex(32))">
+     STRIPE_PUBLIC_KEY=pk_test_xxxxx
+     MAIL_PASSWORD=xxx
+  
+  5. Salva (Ctrl+X, Y, Enter)
+  
+  6. Esegui l'app:
+     $ .\run_dev.ps1
+
+
+IMPORTANTE:
+  • .env è LOCALE e NON sincronizzato su Git ✓
+  • .env.example può essere committato (solo template) ✓
+  • Se cambia la struttura .env, aggiorna .env.example
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔍 VERIFICA IL .GITIGNORE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Per verificare cosa viene escluso:
+
+  # Mostra file che verranno committati:
+  $ git status
+  
+  # Mostra file ignorati:
+  $ git check-ignore -v *
+  
+  # Verifica un file specifico:
+  $ git check-ignore -v .env
+  # Output: .env:.gitignore:17:*.env    .env
+
+
+ATTESO:
+  $ git status
+  
+  On branch main
+  nothing to commit, working tree clean
+  
+  (se tutto è configurato correttamente)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+⚡ SE HAI ACCIDENTALMENTE COMMITTATO UN FILE SENSIBILE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Se accidentalmente hai committato .env o credenziali:
+
+1. IMMEDIATO: Cambia tutte le credenziali nel vero account:
+   - Stripe: Regener nuove chiavi API
+   - Email: Cambia password
+   - Database: Cambia password utente
+
+2. Rimuovi dalla history Git:
+   # Rimuovi file dalla history senza eliminarlo dal disco:
+   $ git rm --cached .env
+   $ git commit -m "Remove .env from version control"
+   
+   # Rimuovi anche dalla history (attenzione! rewrite history):
+   $ git filter-branch --tree-filter 'rm -f .env' HEAD
+
+3. Aggiungi al .gitignore:
+   .env/
+   credenziali sito.txt
+
+4. Commit e push:
+   $ git add .gitignore
+   $ git commit -m "Add .env to .gitignore"
+   $ git push
+
+
+⚠️  IMPORTANTE: Se le credenziali erano pubbliche su GitHub:
+   1. Contatta Stripe/Provider per invalidarle
+   2. Genera nuove credenziali
+   3. Aggiorna il vero .env
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📚 CONTENUTO .ENV.EXAMPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Il file .env.example contiene template per:
+
+FLASK:
+  ✓ FLASK_ENV (development/production)
+  ✓ FLASK_DEBUG (True/False)
+  ✓ SECRET_KEY (da generare)
+
+DATABASE:
+  ✓ DATABASE_URL (SQLite locale o cloud provider)
+  ✓ Esempi per PostgreSQL e MySQL
+
+STRIPE:
+  ✓ STRIPE_PUBLIC_KEY (pk_test_...)
+  ✓ STRIPE_SECRET_KEY (sk_test_...)
+  ✓ STRIPE_WEBHOOK_SECRET
+
+EMAIL:
+  ✓ MAIL_SERVER (es: smtp.gmail.com)
+  ✓ MAIL_PORT (587 per TLS)
+  ✓ MAIL_USE_TLS (True/False)
+  ✓ MAIL_USERNAME (email)
+  ✓ MAIL_PASSWORD (app-specific password)
+  ✓ MAIL_DEFAULT_SENDER
+
+LOGGING:
+  ✓ LOG_LEVEL (DEBUG/INFO/WARNING/ERROR/CRITICAL)
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🔧 BEST PRACTICES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✅ FALLO:
+  • Includi .env.example nel repo (template per developer)
+  • Escludi .env dal repo (contiene secrets locali)
+  • Documenta tutte le variabili in .env.example
+  • Usa variabili d'ambiente per dati sensibili
+  • Cambia SECRET_KEY in produzione
+  • Usa app-specific password per email
+
+❌ NON FARE:
+  • Committare .env (contiene secrets!)
+  • Hardcodare credenziali nel codice
+  • Committare password o API keys
+  • Usare la stessa SECRET_KEY in produzione
+  • Committare database files (.db, .sqlite)
+  • Includere venv nel repo
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📋 CHECKLIST GIT SETUP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Configura il repo così:
+
+☐ .gitignore creato      ✓ Fatto
+☐ .env.example creato    ✓ Fatto
+☐ Copia: cp .env.example .env
+☐ Modifica .env con valori reali
+☐ Aggiungi .env al .gitignore (già fatto)
+☐ Prima commit: git add -A
+☐ Verifica: git status (NO .env, NO venv, NO *.db)
+☐ Commit: git commit -m "Initial commit with gitignore"
+☐ Push: git push origin main
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎯 WORKFLOW PER IL TEAM
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Nuovo developer unisce il team:
+
+1. Clone:
+   $ git clone https://github.com/.../TablHero.git
+
+2. Setup environment:
+   $ cp .env.example .env
+
+3. Modifica .env con credenziali di test:
+   $ nano .env
+   # Modifica STRIPE_PUBLIC_KEY, MAIL_PASSWORD, ecc.
+
+4. Esegui app:
+   $ .\run_dev.ps1
+
+5. Tutto funziona! ✅
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🚀 AGGIORNAMENTO .ENV.EXAMPLE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Se aggiungi nuove variabili d'ambiente:
+
+1. Aggiorna il vero .env:
+   NUOVA_VARIABILE=valore
+
+2. Aggiorna .env.example:
+   # Commenta il valore di default
+   # NUOVA_VARIABILE=default_value
+
+3. Documenta in .env.example:
+   # Descrizione della variabile
+
+4. Commit entrambi:
+   $ git add .env.example app.py (o il file che usa la variabile)
+   $ git commit -m "Add NUOVA_VARIABILE to environment"
+
+NON committare mai il vero .env! ⚠️
+
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║  ✅ GIT CONFIGURATION COMPLETATA!                                           ║
+║                                                                              ║
+║  File creati:                                                                ║
+║    • .gitignore          → Configurazione git                               ║
+║    • .env.example        → Template ambiente                                ║
+║                                                                              ║
+║  Repo pronto per il team! 🚀                                                 ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝

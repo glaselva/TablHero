@@ -3,6 +3,7 @@ from routes.leaderboard import leaderboard_bp
 from flask import Flask, render_template, request  # ✅ AGGIUNTO request
 from flask_login import LoginManager, current_user
 from flask_migrate import Migrate
+from flask_cors import CORS
 from config import Config
 from models import db, bcrypt
 from models.user import User
@@ -21,6 +22,32 @@ load_dotenv()
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
+    
+    # =====================================================================
+    # CONFIGURAZIONE DATABASE DINAMICA PER AMBIENTI
+    # =====================================================================
+    # Se FLASK_ENV='production', tenta di usare DATABASE_URL
+    # Altrimenti usa SQLite locale (sviluppo)
+    flask_env = os.getenv('FLASK_ENV', 'development')
+    
+    if flask_env == 'production':
+        # PRODUZIONE: Usa variabile d'ambiente DATABASE_URL (da cloud provider)
+        database_url = os.getenv('DATABASE_URL')
+        if not database_url:
+            print("⚠️  ATTENZIONE: DATABASE_URL non impostata in produzione!")
+            print("    Fallback a SQLite locale")
+            app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tablhero.db'
+        else:
+            # PostgreSQL o MySQL dal provider cloud (Railway, Heroku, ecc)
+            app.config['SQLALCHEMY_DATABASE_URI'] = database_url
+            print(f"✅ Connesso a database REMOTO (produzione)")
+    else:
+        # SVILUPPO: SQLite locale
+        app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tablhero.db'
+        print(f"✅ Usando SQLite locale (sviluppo)")
+    
+    # Abilita CORS per le app mobile (BeeWare)
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
 
     # Session timeout aumentato per Stripe (24h invece di 30min)
     app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(hours=24)
@@ -77,34 +104,47 @@ def create_app():
     from routes.dashboard import dashboard_bp
     from routes.eventi import eventi_bp
     from routes.admin import admin_bp
+    from routes.api import api_bp
     
     app.register_blueprint(auth_bp)
     app.register_blueprint(dashboard_bp)
     app.register_blueprint(eventi_bp)
     app.register_blueprint(admin_bp)
     app.register_blueprint(leaderboard_bp)
+    app.register_blueprint(api_bp)
     
     # Route homepage
     @app.route('/')
     def index():
-        # Conta solo membri ATTIVI (escludi disattivati)
-        total_members = User.query.filter_by(attivo=True).count()
+        try:
+            # Conta solo membri ATTIVI (escludi disattivati)
+            total_members = User.query.filter_by(attivo=True).count()
 
-        # Conta per ruolo (solo attivi)
-        sidekick_count = User.query.filter_by(ruolo='sidekick', attivo=True).count()
-        tablhero_count = User.query.filter_by(ruolo='tablhero', attivo=True).count()
-        veteran_count = User.query.filter_by(ruolo='veteran', attivo=True).count()
-        game_architect_count = User.query.filter_by(ruolo='game_architect', attivo=True).count()
-        founder_count = User.query.filter_by(ruolo='founder', attivo=True).count()
+            # Conta per ruolo (solo attivi)
+            sidekick_count = User.query.filter_by(ruolo='sidekick', attivo=True).count()
+            tablhero_count = User.query.filter_by(ruolo='tablhero', attivo=True).count()
+            veteran_count = User.query.filter_by(ruolo='veteran', attivo=True).count()
+            game_architect_count = User.query.filter_by(ruolo='game_architect', attivo=True).count()
+            founder_count = User.query.filter_by(ruolo='founder', attivo=True).count()
 
-        # Prossimi eventi per utenti iscritti
-        prossimi_eventi = None
-        if current_user.is_authenticated and current_user.ha_pagato:
-            prossimi_eventi = (Evento.query
-                              .filter(Evento.data_evento > datetime.utcnow())
-                              .order_by(Evento.data_evento.asc())
-                              .limit(3)
-                              .all())
+            # Prossimi eventi per utenti iscritti
+            prossimi_eventi = None
+            if current_user.is_authenticated and current_user.ha_pagato:
+                prossimi_eventi = (Evento.query
+                                  .filter(Evento.data_evento > datetime.utcnow())
+                                  .order_by(Evento.data_evento.asc())
+                                  .limit(3)
+                                  .all())
+        except Exception as e:
+            # Se il database non è disponibile, usa valori di default
+            print(f"⚠️  Database non disponibile: {e}")
+            total_members = 0
+            sidekick_count = 0
+            tablhero_count = 0
+            veteran_count = 0
+            game_architect_count = 0
+            founder_count = 0
+            prossimi_eventi = None
 
         return render_template('index.html',
                              total_members=total_members,
@@ -222,7 +262,11 @@ def create_app():
     
     # Crea le tabelle del database
     with app.app_context():
-        db.create_all()
+        try:
+            db.create_all()
+        except Exception as e:
+            print(f"⚠️  Avvertenza: Impossibile connettersi al database: {e}")
+            print("L'app avvierà comunque in modalità sviluppo senza database")
 
         # 🔄 SCHEDULER PER REMINDER AUTOMATICI
         def job_reminder():

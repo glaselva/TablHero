@@ -5,9 +5,16 @@ from dotenv import load_dotenv
 load_dotenv()
 
 class Config:
+    """Configurazione base (usata da tutti gli ambienti)"""
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'dev-key-molto-sicura'
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:@localhost/tablhero'
     SQLALCHEMY_TRACK_MODIFICATIONS = False
+    
+    # =====================================================================
+    # DATABASE CONFIGURATION - Dinamico per ambienti diversi
+    # =====================================================================
+    # La variabile DATABASE_URL è controllata in app.py
+    # Questo è il fallback se non viene impostato
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'sqlite:///tablhero.db')
     
     # Stripe Configuration
     STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')

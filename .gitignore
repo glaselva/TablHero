@@ -1,0 +1,211 @@
+# ═══════════════════════════════════════════════════════════════════════════
+# TablHero .gitignore - Git configuration per il progetto
+# 
+# Questo file esclude i file che non devono essere versionati su GitHub
+# ═══════════════════════════════════════════════════════════════════════════
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# PYTHON - Virtual Environment e Pacchetti
+# ───────────────────────────────────────────────────────────────────────────
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribuzione
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# FLASK - Development e Config
+# ───────────────────────────────────────────────────────────────────────────
+
+# Flask instance folder
+instance/
+.webassets-cache
+
+# Flask dotenv
+.flaskenv
+
+# Environment variables (IMPORTANTE: non committare secrets!)
+.env
+.env.local
+.env.*.local
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# DATABASE - SQLite e Database Files
+# ───────────────────────────────────────────────────────────────────────────
+
+# SQLite database (sviluppo locale)
+*.db
+*.sqlite
+*.sqlite3
+tablhero.db
+
+# Database files
+*.sql.bak
+*.dump
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# IDE / TEXT EDITORS
+# ───────────────────────────────────────────────────────────────────────────
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs (PyCharm, IntelliJ, etc)
+.idea/
+*.iml
+*.iws
+*.ipr
+.gradle/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
+*~
+*.swp
+*.swo
+.vim/
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# OPERATING SYSTEM
+# ───────────────────────────────────────────────────────────────────────────
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+*.lnk
+
+# Linux
+.directory
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# PROJECT SPECIFIC - TablHero
+# ───────────────────────────────────────────────────────────────────────────
+
+# Credenziali e file sensibili
+credenziali sito.txt
+credentials.txt
+secrets.txt
+.credentials
+.secrets
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*~
+
+# OS specific
+.DS_Store
+Thumbs.db
+
+# Test reports
+test-results.xml
+coverage-report/
+
+# Build artifacts
+*.pyc
+*.pyo
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# DOCKER (se usi Docker)
+# ───────────────────────────────────────────────────────────────────────────
+
+# Docker
+docker-compose.override.yml
+.dockerignore
+
+
+# ───────────────────────────────────────────────────────────────────────────
+# ALLOWED EXCEPTIONS - File che devono essere committati
+# ───────────────────────────────────────────────────────────────────────────
+
+# Consenti questi file anche se solitamente esclusi:
+
+# Non escludere i file di configurazione del progetto
+!.gitkeep
+!.env.example
+!.env.production.example
+
+# Cartelle da includere anche se normalmente escluse
+!logs/.gitkeep
+!instance/.gitkeep
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# FINE GITIGNORE
+# ═══════════════════════════════════════════════════════════════════════════

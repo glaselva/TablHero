@@ -4,7 +4,8 @@ Flask-Login==0.6.3
 Flask-Mail==0.10.0
 Flask-Bcrypt==1.0.1
 Flask-Migrate==4.0.7
-PyMySQL==1.1.1
+Flask-CORS==4.0.0
 stripe==10.6.0
 python-dotenv==1.0.1
 APScheduler==3.10.4
+requests==2.32.5
